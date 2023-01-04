@@ -1,0 +1,18 @@
+{
+    "version": "0.0.0",
+    "contributors": [
+        "haxeui",
+        "ianharrigan"
+    ],
+    "license": "MIT",
+    "tags": [
+    ],
+    "releasenote": "0.0.0",
+    "dependencies": {
+        "promises": ""
+    },
+    "classPath": "src",
+    "name": "db-core",
+    "description": "",
+    "url": ""
+}
