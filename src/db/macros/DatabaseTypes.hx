@@ -3,6 +3,8 @@ package db.macros;
 import haxe.macro.Context;
 import haxe.macro.Expr;
 
+using StringTools;
+
 class DatabaseTypes {
     private static var typeClasses:Map<String, String> = [];
 
@@ -60,7 +62,7 @@ class DatabaseTypes {
 
         for (typeId in typeIds) {
             fields.push({
-                name: typeId.toUpperCase(),
+                name: typeId.toUpperCase().replace("-", "_"),
                 kind: FVar(
                     macro: String,
                     macro $v{typeId}
