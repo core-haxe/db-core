@@ -35,7 +35,7 @@ db.connect().then(result -> ´
 });
 ```
 
-# db creation (MySql)
+# mysql
 
 ```haxe
 var db:IDatabase = DatabaseFactory.createDatabase(DatabaseFactory.MYSQL, {
@@ -47,7 +47,7 @@ var db:IDatabase = DatabaseFactory.createDatabase(DatabaseFactory.MYSQL, {
 ```
 _Note: must include [__db-mysql__](https://github.com/core-haxe/db-mysql) for plugin to be auto-registered_
 
-# db creation (Sqlite)
+# sqlite
 
 ```haxe
 var db:IDatabase = DatabaseFactory.createDatabase(DatabaseFactory.SQLITE, {filename: "somedb.db"});
