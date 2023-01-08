@@ -1,7 +1,7 @@
 # db-core
 pluggable database abstraction
 
-# basic usage
+# db creation (MySql)
 
 ```haxe
 var db:IDatabase = DatabaseFactory.createDatabase(DatabaseFactory.MYSQL, {
@@ -11,10 +11,16 @@ var db:IDatabase = DatabaseFactory.createDatabase(DatabaseFactory.MYSQL, {
     pass: "somepassword"
 });
 ```
+
+# db creation (Sqlite)
+
 ```haxe
 var db:IDatabase = DatabaseFactory.createDatabase(DatabaseFactory.SQLITE, {filename: "somedb.db"});
 ```
-```
+
+# basic usage
+
+```haxe
 db.connect().then(result -> ´
     return result.database.createTable("Persons", [
         {name: "PersonID", type: Number, options: [PrimaryKey, NotNull, AutoIncrement]},
