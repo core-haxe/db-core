@@ -44,10 +44,13 @@ class Query {
 
     private static function generate(qe:QueryExpr):haxe.macro.Expr {
         return switch (qe) {
-          case QueryValue(e): macro QueryValue($e);
-          case QueryBinop(op, e1, e2): macro QueryBinop($v{op}, $e{generate(e1)}, $e{generate(e2)});
-          case QueryParenthesis(e): macro QueryParenthesis($e{generate(e)});
-          case _: macro $v{qe}; // Should work fine for everything that is only made up of literals
+            case QueryValue(e): macro QueryValue($e);
+            case QueryBinop(op, e1, e2): macro QueryBinop($i{haxe.EnumTools.EnumValueTools.getName(op)}, $e{generate(e1)}, $e{generate(e2)});
+            case QueryParenthesis(e): macro QueryParenthesis($e{generate(e)});
+            case QueryConstant(c): macro QueryConstant($i{haxe.EnumTools.EnumValueTools.getName(c)}($a{
+                haxe.EnumTools.EnumValueTools.getParameters(c).map(p -> macro $v{p})
+            }));
+            case QueryUnsupported(v): macro QueryUnsupported($v{v});
         }
     }
 
