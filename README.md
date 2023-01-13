@@ -4,17 +4,6 @@ pluggable database abstraction
 # basic usage
 
 ```haxe
-var db:IDatabase = DatabaseFactory.createDatabase(DatabaseFactory.MYSQL, {
-    database: "somedb",
-    host: "localhost",
-    user: "someuser",
-    pass: "somepassword"
-});
-```
-```haxe
-var db:IDatabase = DatabaseFactory.createDatabase(DatabaseFactory.SQLITE, {filename: "somedb.db"});
-```
-```
 db.connect().then(result -> ´
     return result.database.createTable("Persons", [
         {name: "PersonID", type: Number, options: [PrimaryKey, NotNull, AutoIncrement]},
@@ -45,3 +34,22 @@ db.connect().then(result -> ´
     // error
 });
 ```
+
+# mysql
+
+```haxe
+var db:IDatabase = DatabaseFactory.createDatabase(DatabaseFactory.MYSQL, {
+    database: "somedb",
+    host: "localhost",
+    user: "someuser",
+    pass: "somepassword"
+});
+```
+_Note: must include [__db-mysql__](https://github.com/core-haxe/db-mysql) for plugin to be auto-registered_
+
+# sqlite
+
+```haxe
+var db:IDatabase = DatabaseFactory.createDatabase(DatabaseFactory.SQLITE, {filename: "somedb.db"});
+```
+_Note: must include [__db-sqlite__](https://github.com/core-haxe/db-sqlite) for plugin to be auto-registered_
