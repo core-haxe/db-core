@@ -8,6 +8,8 @@ interface ITable {
     public var name:String;
     public var exists:Bool;
 
+    public function schema():Promise<DatabaseResult<TableSchema>>;
+
     public function all():Promise<DatabaseResult<Array<Record>>>;
     public function page(pageIndex:Int, pageSize:Int = 100, query:QueryExpr = null):Promise<DatabaseResult<Array<Record>>>;
     public function add(record:Record):Promise<DatabaseResult<Record>>;

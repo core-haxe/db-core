@@ -5,6 +5,8 @@ import promises.Promise;
 interface IDatabase {
     public function config(details:Dynamic):Void;
 
+    public function schema():Promise<DatabaseResult<DatabaseSchema>>;
+
     public function defineTableRelationship(field1:String, field2:String):Void;
     public function definedTableRelationships():RelationshipDefinitions;
 
