@@ -35,6 +35,93 @@ db.connect().then(result -> ´
 });
 ```
 
+# relationships example (one-to-one)
+
+### 'Person' table:
+| personId | firstName | lastName | iconId |
+|----------|-----------|----------|--------|
+| 1        | Bob       | Barker   | 2      |
+| 2        | Ian       | Harrigan | 3      |
+
+### 'Icon' table:
+| iconId | path      |
+|--------|-----------|
+| 1      | icon1.png |
+| 2      | icon2.png |
+| 3      | icon3.png |
+
+```haxe
+db.defineTableRelationship("Person.iconId", "Icon.iconId");
+db.connect().then(result -> {
+    return result.database.table("Person");
+}).then(result -> {
+    return result.table.find(query($personId = 2));
+}).then(result -> {
+    printRecords(result.data);
+    return null;
+}, (error:DatabaseError) -> {
+    // error
+    return null;
+});
+```
+### result:
+| Person.personId | Person.firstName | Person.lastName | Person.iconId | Person.Icon.iconId | Person.Icon.path |
+|-----------------|------------------|-----------------|---------------|--------------------|------------------|
+| 2               | Ian              | Harrigan        | 3             | 3                  | icon3.png        |
+
+# relationships example (one-to-many)
+
+### 'Person' table:
+| personId | firstName | lastName | iconId |
+|----------|-----------|----------|--------|
+| 1        | Bob       | Barker   | 2      |
+| 2        | Ian       | Harrigan | 3      |
+
+### 'Organization' table:
+| organizationId | name     | iconId |
+|----------------|----------|--------|
+| 1              | haxeui   | 2      |
+| 2              | acme org | 1      |
+| 3              | inps     | 3      |
+
+### 'Person_Organization' table:
+| personId | organizationId |
+|----------|----------------|
+| 2        | 1              |
+| 2        | 3              |
+| 1        | 2              |
+
+### 'Icon' table:
+| iconId | path      |
+|--------|-----------|
+| 1      | icon1.png |
+| 2      | icon2.png |
+| 3      | icon3.png |
+
+```haxe
+db.defineTableRelationship("Person.personId", "Person_Organization.personId");
+db.defineTableRelationship("Person.iconId", "Icon.iconId");
+db.defineTableRelationship("Organization.organizationId", "Person_Organization.organizationId");
+db.defineTableRelationship("Organization.iconId", "Icon.iconId");
+db.connect().then(result -> {
+    return result.database.table("Person");
+}).then(result -> {
+    return result.table.find(query($personId = 2));
+}).then(result -> {
+    printRecords(result.data);
+    return null;
+}, (error:DatabaseError) -> {
+    // error
+    return null;
+});
+```
+
+### result:
+| Person.personId | Person.firstName | Person.lastName | Person.iconId | Person.Icon.iconId | Person.Icon.path | Person.Person_Organization.personId | Person.Person_Organization.organizationId | Organization.organizationId | Organization.name | Organization.Icon.iconId | Organization.iconId | Organization.Icon.path |
+|-----------------|------------------|-----------------|---------------|--------------------|------------------|-------------------------------------|-------------------------------------------|-----------------------------|-------------------|--------------------------|---------------------|------------------------|
+| 2               | Ian              | Harrigan        | 3             | 3                  | icon3.png        | 2                                   | 1                                         | 1                           | haxeui            | 2                        | 2                   | icon2.png              |
+| 2               | Ian              | Harrigan        | 3             | 3                  | icon3.png        | 2                                   | 3                                         | 3                           | inps              | 3                        | 3                   | icon3.png              |
+
 # mysql
 
 ```haxe
