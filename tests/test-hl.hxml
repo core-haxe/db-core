@@ -1,0 +1,9 @@
+--class-path .
+--main TestAll
+
+-lib utest
+-lib db-core
+-lib db-sqlite
+
+--hl build/hl/test-all.hl
+--cmd hl .\build\hl\test-all.hl

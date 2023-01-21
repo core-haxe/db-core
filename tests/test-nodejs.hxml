@@ -1,0 +1,14 @@
+#-cmd nodejs-windows-install.bat
+#--next
+
+--class-path .
+--main TestAll
+
+-lib utest
+-lib db-core
+-lib db-sqlite
+-lib hxnodejs
+-D no-deprecation-warnings
+
+--js build/nodejs/test-all.js
+--cmd node build/nodejs/test-all.js
