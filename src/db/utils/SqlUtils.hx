@@ -61,7 +61,7 @@ class SqlUtils {
             var localExclusions = exclusions.copy();
             exclusions.push(tableName);
 
-            if (databaseSchema != null) {
+            if (databaseSchema != null && relationships.get(tableName) != null) {
                 var tableSchema = databaseSchema.findTable(tableName);
                 if (!alwaysAlias) {
                     for (tableColumn in tableSchema.columns) {
@@ -143,7 +143,7 @@ class SqlUtils {
                         }
                     }
         
-                    sql += '\n    INNER JOIN ${sourceTable}${as} ON ${table2Alias}.${field2} = ${table1Alias}.${field1}';
+                    sql += '\n    LEFT JOIN ${sourceTable}${as} ON ${table2Alias}.${field2} = ${table1Alias}.${field1}';
                     if (!counters.exists(sourceTable)) {
                         counters.set(sourceTable, 1);
                     } else {
