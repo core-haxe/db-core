@@ -74,7 +74,9 @@ class SqlUtils {
                     for (tableColumn in tableSchema.columns) {
                         var fieldAlias = '${tableName}.${tableColumn.name}';
                         var fieldAs = '${fieldAlias} as "${fieldAlias}"';
-                        fieldAliases.push(fieldAs);
+                        if (!fieldAliases.contains(fieldAs)) {
+                            fieldAliases.push(fieldAs);
+                        }
                     }
                 }
             }
@@ -138,7 +140,9 @@ class SqlUtils {
                                 if (tableName != sourceTable) {
                                     fieldAs = '${fieldAlias} as "${tableName}.${sourceTable}.${tableColumn.name}"';
                                 }
-                                fieldAliases.push(fieldAs);
+                                if (!fieldAliases.contains(fieldAs)) {
+                                    fieldAliases.push(fieldAs);
+                                }
                             }
                         }
                     }
