@@ -6,10 +6,10 @@ using StringTools;
 
 class SqlUtils {
     public static function buildInsert(table:ITable, record:Record, values:Array<Any> = null):String {
-        var fieldNames = record.fieldNames;
+        var fieldNames = fieldNamesFromRecord(record);
         var sql = 'INSERT INTO ${table.name} (${fieldNames.join(", ")}) VALUES ';
         var placeholders = [];
-        for (f in fieldNames) {
+        for (f in record.fieldNames) {
             placeholders.push('?');
             if (values != null) {
                 values.push(record.field(f));
@@ -184,10 +184,10 @@ class SqlUtils {
     }
 
     public static function buildDeleteRecord(table:ITable, record:Record, values:Array<Any> = null):String {
-        var fieldNames = record.fieldNames;
+        var fieldNames = fieldNamesFromRecord(record);
         var sql = 'DELETE FROM ${table.name} WHERE ';
         var placeholders = [];
-        for (f in fieldNames) {
+        for (f in record.fieldNames) {
             placeholders.push('${f} = ?');
             if (values != null) {
                 values.push(record.field(f));
@@ -208,10 +208,10 @@ class SqlUtils {
     }
 
     public static function buildUpdate(table:ITable, query:QueryExpr, record:Record, values:Array<Any> = null):String {
-        var fieldNames = record.fieldNames;
+        var fieldNames = fieldNamesFromRecord(record);
         var sql = 'UPDATE ${table.name} SET ';
         var placeholders = [];
-        for (f in fieldNames) {
+        for (f in record.fieldNames) {
             placeholders.push('${f} = ?');
             if (values != null) {
                 values.push(record.field(f));
@@ -221,5 +221,13 @@ class SqlUtils {
         sql += ' WHERE (${Query.queryExprToSql(query)})';
         sql += ';';
         return sql;
+    }
+
+    private static function fieldNamesFromRecord(record:Record):Array<String> {
+        var names = [];
+        for (f in record.fieldNames) {
+            names.push('`${f}`');
+        }
+        return names;
     }
 }
