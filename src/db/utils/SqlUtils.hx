@@ -20,9 +20,18 @@ class SqlUtils {
         return sql;
     }
 
-    public static function buildSelect(table:ITable, query:QueryExpr = null, limit:Null<Int> = null, values:Array<Any> = null, relationships:RelationshipDefinitions = null, relationshipExclusions:Array<String> = null, databaseSchema:DatabaseSchema = null):String {
+    public static function buildSelect(table:ITable, query:QueryExpr = null, limit:Null<Int> = null, values:Array<Any> = null, relationships:RelationshipDefinitions = null, databaseSchema:DatabaseSchema = null):String {
+        var alwaysAliasResultFields:Bool = table.db.getProperty("alwaysAliasResultFields");
         var fieldAliases = [];
-        var sqlJoin = addJoins(table.name, relationships, databaseSchema, fieldAliases, false, null, relationshipExclusions);
+        var sqlJoin = buildJoins(table.name, null, table.name, relationships, databaseSchema, fieldAliases);
+        if (alwaysAliasResultFields == true || (fieldAliases != null && fieldAliases.length > 0)) {
+            var tableSchema = databaseSchema.findTable(table.name);
+            if (tableSchema != null) {
+                for (tableColumn in tableSchema.columns) {
+                    fieldAliases.insert(0, '${table.name}.${tableColumn.name} AS `${table.name}.${tableColumn.name}`');
+                }
+            }
+        }
 
         var fieldList = '*';
         if (fieldAliases.length > 0) {
@@ -32,7 +41,7 @@ class SqlUtils {
         sql += sqlJoin;
 
         if (query != null) {
-            sql += '\nWHERE (${Query.queryExprToSql(query, values)})';
+            sql += '\nWHERE (${Query.queryExprToSql(query, values, table.name)})';
         }
         if (limit != null) {
             sql += ' LIMIT ' + limit;
@@ -41,145 +50,43 @@ class SqlUtils {
         return sql;
     }
 
-    private static function addJoins(tableName:String, relationships:RelationshipDefinitions, databaseSchema:DatabaseSchema, fieldAliases:Array<String>, invert:Bool = false, counters:Map<String, Int> = null, exclusions:Array<String> = null) {
+    private static function buildJoins(tableName:String, prefix:String, fieldNamePrefix:String, relationships:RelationshipDefinitions, databaseSchema:DatabaseSchema, fieldAliases:Array<String>) {
         if (relationships == null) {
             return "";
         }
+        var sql = "";
 
-        if (exclusions == null) {
-            exclusions = [];
-        }
-
-        if (exclusions.contains(tableName)) {
+        var tableRelationships = relationships.get(tableName);
+        if (tableRelationships == null) {
             return "";
         }
-
-        var alwaysAlias:Bool = true; // might want to make this configurable somehow, output is actually maybe more sensible that "field_1", instead it can be "table.join_table.field"
-
-        var sql = "";
-        if (relationships != null) {
-            var localExclusions = exclusions.copy();
-            exclusions.push(tableName);
-
-            if (databaseSchema != null && relationships.get(tableName) != null) {
-                var tableSchema = databaseSchema.findTable(tableName);
-                if (!alwaysAlias) {
-                    for (tableColumn in tableSchema.columns) {
-                        var fieldAlias = '${tableName}.${tableColumn.name}';
-                        if (!fieldAliases.contains(fieldAlias)) {
-                            fieldAliases.push(fieldAlias);
-                        }
-                    }
-                } else {
-                    for (tableColumn in tableSchema.columns) {
-                        var fieldAlias = '${tableName}.${tableColumn.name}';
-                        var fieldAs = '${fieldAlias} as "${fieldAlias}"';
-                        if (!fieldAliases.contains(fieldAs)) {
-                            fieldAliases.push(fieldAs);
-                        }
-                    }
-                }
-            }
-
-            var tableRelationships = relationships.get(tableName);
-            if (tableRelationships != null) {
-                if (counters == null) {
-                    counters = [];
-                }
-                var additionalTables = [];
-                for (tableRelationship in tableRelationships) {
-                    var table1 = tableRelationship.table1;
-                    var table2 = tableRelationship.table2;
-                    var field1 = tableRelationship.field1;
-                    var field2 = tableRelationship.field2;
-
-                    var sourceTable = table2;
-                    if (invert) {
-                        sourceTable = table1;
-                        invert = false;
-                    }
-
-                    if (localExclusions.contains(sourceTable)) {
-                        continue;
-                    }
-
-                    var table1Alias = table1;
-                    var table2Alias = table2;
-
-                    var as = "";
-                    var sourceTableAlias = sourceTable;
-                    if (counters.exists(sourceTable)) {
-                        table2Alias += counters.get(sourceTable);
-                        sourceTableAlias += counters.get(sourceTable);
-                        as = ' AS ${table2Alias}';
-                    }
-
-                    if (databaseSchema != null) {
-                        var tableSchema = databaseSchema.findTable(sourceTable);
-                        if (!alwaysAlias) {
-                            for (tableColumn in tableSchema.columns) {
-                                var field = '${sourceTable}.${tableColumn.name}';
-                                if (counters.exists(field)) {
-                                    var fieldAlias = '${sourceTableAlias}.${tableColumn.name}';
-                                    //var fieldAs = '${fieldAlias} as "${tableColumn.name}_${counters.get(field)}"';
-                                    var fieldAs = '${fieldAlias} as "${sourceTable}.${tableColumn.name}"';
-                                    if (!fieldAliases.contains(fieldAs)) {
-                                        fieldAliases.push(fieldAs);
-                                    }
-                                } else {
-                                    counters.set(field, 1);
-                                    if (!fieldAliases.contains(field)) {
-                                        fieldAliases.push(field);
-                                    }
-                                }
-                            }
-                        } else {
-                            for (tableColumn in tableSchema.columns) {
-                                var fieldAlias = '${sourceTableAlias}.${tableColumn.name}';
-                                var fieldAs = '${fieldAlias} as "${sourceTable}.${tableColumn.name}"';
-                                if (tableName != sourceTable) {
-                                    fieldAs = '${fieldAlias} as "${tableName}.${sourceTable}.${tableColumn.name}"';
-                                }
-                                if (!fieldAliases.contains(fieldAs)) {
-                                    fieldAliases.push(fieldAs);
-                                }
-                            }
-                        }
-                    }
         
-                    sql += '\n    LEFT JOIN ${sourceTable}${as} ON ${table2Alias}.${field2} = ${table1Alias}.${field1}';
-                    if (!counters.exists(sourceTable)) {
-                        counters.set(sourceTable, 1);
-                    } else {
-                        counters.set(sourceTable, counters.get(sourceTable) + 1);
-                    }
 
-                    for (additionalTableName in relationships.keys()) {
-                        if (additionalTableName == tableName) {
-                            continue;
-                        }
-
-                        for (tableRelationship2 in relationships.get(additionalTableName)) {
-                            if (tableRelationship2.table2 == sourceTable
-                                && relationships.get(additionalTableName) != null
-                                && !exclusions.contains(additionalTableName)) {
-                                if (!additionalTables.contains(additionalTableName)) {
-                                    additionalTables.push(additionalTableName);
-                                }
-                            }
-                        }
-                    }
-                }
-
-                if (additionalTables.length > 0) {
-                    for (a in additionalTables) {
-                        sql += addJoins(a, relationships, databaseSchema, fieldAliases, true, counters, exclusions);
-                    }
-                }
-    
+        for (tableRelationship in tableRelationships) {
+            var table1 = tableRelationship.table1;
+            if (prefix != null) {
+                table1 = prefix + "." + table1;
             }
-        }
+            var field1 = tableRelationship.field1;
+            var table2 = tableRelationship.table2;
+            var field2 = tableRelationship.field2;
+            var joinName = tableRelationship.table1 + "." + table2;
+            if (prefix != null) {
+                joinName = prefix + "." + joinName;
+            }
 
+            var tableSchema = databaseSchema.findTable(table2);
+            if (tableSchema == null) {
+                continue;
+            }
+            for (tableColumn in tableSchema.columns) {
+                fieldAliases.push('`${joinName}`.`${tableColumn.name}` AS `${fieldNamePrefix}.${table2}.${tableColumn.name}`');
+            }
+
+            sql += '\n    LEFT JOIN `${table2}` AS `${joinName}` ON `${joinName}`.`${field2}` = `${table1}`.`${field1}`';
+            sql += buildJoins(table2, table1, fieldNamePrefix + "." + table2, relationships, databaseSchema, fieldAliases);
+        }
+        
         return sql;
     }
 
@@ -212,9 +119,14 @@ class SqlUtils {
         var sql = 'UPDATE ${table.name} SET ';
         var placeholders = [];
         for (f in record.fieldNames) {
-            placeholders.push('${f} = ?');
-            if (values != null) {
-                values.push(record.field(f));
+            var v = record.field(f);
+            if (v == null) {
+                placeholders.push('${f} = NULL');
+            } else {
+                placeholders.push('${f} = ?');
+                if (values != null) {
+                    values.push(v);
+                }
             }
         }
         sql += '${placeholders.join(", ")}';
