@@ -137,6 +137,8 @@ _Note: must include [__db-mysql__](https://github.com/core-haxe/db-mysql) for pl
 # sqlite
 
 ```haxe
-var db:IDatabase = DatabaseFactory.createDatabase(DatabaseFactory.SQLITE, {filename: "somedb.db"});
+var db:IDatabase = DatabaseFactory.createDatabase(DatabaseFactory.SQLITE, {
+    filename: "somedb.db"
+});
 ```
 _Note: must include [__db-sqlite__](https://github.com/core-haxe/db-sqlite) for plugin to be auto-registered_
