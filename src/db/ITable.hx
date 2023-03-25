@@ -17,6 +17,6 @@ interface ITable {
     public function delete(record:Record):Promise<DatabaseResult<Record>>;
     public function deleteAll(query:QueryExpr = null):Promise<DatabaseResult<Bool>>;
     public function update(query:QueryExpr, record:Record):Promise<DatabaseResult<Record>>;
-    public function find(query:QueryExpr):Promise<DatabaseResult<Array<Record>>>;
-    public function findOne(query:QueryExpr):Promise<DatabaseResult<Record>>;
+    public function find(query:QueryExpr, allowRelationships:Bool = true):Promise<DatabaseResult<Array<Record>>>;
+    public function findOne(query:QueryExpr, allowRelationships:Bool = true):Promise<DatabaseResult<Record>>;
 }
