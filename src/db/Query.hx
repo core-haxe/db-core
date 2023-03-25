@@ -1,8 +1,8 @@
 package db;
 
-import haxe.macro.ExprTools;
-import haxe.macro.Expr;
 import haxe.macro.Context;
+import haxe.macro.Expr;
+import haxe.macro.ExprTools;
 
 using StringTools;
 
@@ -11,8 +11,8 @@ enum QBinop {
     QOpBoolAnd;
     QOpBoolOr;
     QOpNotEq;
+    QOpIn;
     QOpUnsupported(v:String);
-   
 }
 
 enum QConstant {
@@ -62,6 +62,7 @@ class Query {
                     case OpBoolAnd:     QBinop.QOpBoolAnd;
                     case OpBoolOr:      QBinop.QOpBoolOr;
                     case OpNotEq:       QBinop.QOpNotEq;
+                    case OpIn:          QBinop.QOpIn;
                     case _:  
                         trace("unsupported", op, op.getName());
                         QBinop.QOpUnsupported(op.getName());
@@ -81,15 +82,23 @@ class Query {
             case EConst(CString(s, _)):    
                 QueryConstant(QString(s));
             case EField(e, field):
-                switch (exprToQueryExpr(e)) {
-                    case QueryValue(e):  QueryValue(macro @:pos(e.pos) $e.$field);
-                    case qe:             qe;
+                var s = ExprTools.toString(e);
+                if (s.startsWith("$")) {
+                    var varName = s.substr(1) + "." + field;
+                    QueryConstant(QIdent(varName));
+                } else {
+                    switch (exprToQueryExpr(e)) {
+                        case QueryValue(e):  QueryValue(macro @:pos(e.pos) $e.$field);
+                        case qe:             qe;
+                    }
                 }
             case EArray(e1, e2):
                 switch (exprToQueryExpr(e1)) {
                     case QueryValue(e):  QueryValue(macro @:pos(e.pos) $e[$e2]);
                     case qe:             qe;
                 }
+            //case EArrayDecl(values):    
+
             case ECall(e, params):
                 switch (exprToQueryExpr(e)) {
                     case QueryValue(e):  QueryValue(macro @:pos(e.pos) $e($a{params}));
@@ -102,32 +111,47 @@ class Query {
     }
     #end
 
-    public static function queryExprToSql(qe:QueryExpr, values:Array<Any> = null):String {
+    public static function queryExprToSql(qe:QueryExpr, values:Array<Any> = null, fieldPrefix:String = null):String {
         var sb = new StringBuf();
-        queryExprPartToSql(qe, sb, values);
+        queryExprPartToSql(qe, sb, values, fieldPrefix);
         return sb.toString();
     }
 
-    private static function queryExprPartToSql(qe:QueryExpr, sb:StringBuf, values:Array<Any>) {
+    private static function queryExprPartToSql(qe:QueryExpr, sb:StringBuf, values:Array<Any>, fieldPrefix:String) {
         switch (qe) {
             case QueryBinop(op, e1, e2):
-                queryExprPartToSql(e1, sb, values);
+                queryExprPartToSql(e1, sb, values, fieldPrefix);
                 switch (op) {
                     case QOpAssign:             sb.add(" = ");
                     case QOpBoolAnd:            sb.add(" AND ");
                     case QOpBoolOr:             sb.add(" OR ");
                     case QOpNotEq:              sb.add(" <> ");
+                    case QOpIn:                 sb.add(" IN ");
                     case QOpUnsupported(v):    
                         trace("WARNING: unsupported binary operation encountered:", v);
                     case _:    
                 }
-                queryExprPartToSql(e2, sb, values);
+                queryExprPartToSql(e2, sb, values, fieldPrefix);
             case QueryParenthesis(e):
                 sb.add("(");
-                queryExprPartToSql(e, sb, values);
+                queryExprPartToSql(e, sb, values, fieldPrefix);
                 sb.add(")");
             case QueryConstant(QIdent(s)): 
-                sb.add(s);
+                var full = s;
+                if (fieldPrefix != null) {
+                    full = fieldPrefix + "." + s;
+                }
+                if (full.contains(".")) {
+                    var parts = full.split(".");
+                    var field = parts.pop();
+                    sb.add("`");
+                    sb.add(parts.join("."));
+                    sb.add("`.`");
+                    sb.add(field);
+                    sb.add("`");
+                } else {
+                    sb.add(full);
+                }
             case QueryConstant(QInt(s)):    
                 if (values == null) {
                     sb.add(s);
@@ -143,7 +167,20 @@ class Query {
                     sb.add("?");
                 }
             case QueryValue(v):
-                if (values == null) {
+                if ((v is Array)) {
+                    sb.add("(");
+                    var array:Array<Any> = cast v;
+                    var newArray:Array<String> = [];
+                    for (a in array) {
+                        if (a is String) {
+                            newArray.push('"${Std.string(a)}"');
+                        } else {
+                            newArray.push(Std.string(a));
+                        }
+                    }
+                    sb.add(newArray.join(", "));
+                    sb.add(")");
+                } else if (values == null) {
                     sb.add(v);
                 } else {
                     values.push(v);
