@@ -15,6 +15,13 @@ class Record {
         return list;
     }
 
+    public function hasField(name:String):Bool {
+        if (data == null) {
+            return false;
+        }
+        return data.exists(name);
+    }
+
     public function field(name:String, value:Any = null):Any { // if value is non null, this is effectively a setter
         if (value != null) {
             data.set(name, value);
@@ -22,6 +29,22 @@ class Record {
         }
 
         return data.get(name);
+    }
+
+    public function empty(name:String) {
+        data.set(name, null);
+    }
+
+    public function values():Array<Any> {
+        var v = [];
+        for (k in data.keys()) {
+            v.push(data.get(k));
+        }
+        return v;
+    }
+
+    public function removeField(name:String) {
+        data.remove(name);
     }
 
     public static function fromDynamic(data:Dynamic):Record {
