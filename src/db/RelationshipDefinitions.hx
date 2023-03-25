@@ -34,6 +34,14 @@ class RelationshipDefinitions {
         return _defs.get(table);
     }
 
+    public function all():Array<RelationshipDefinition> {
+        var list = [];
+        for (key in _defs.keys()) {
+            list = list.concat(_defs.get(key));
+        }
+        return list;
+    }
+
     public function keys():Iterator<String> {
         return _defs.keys();
     }
