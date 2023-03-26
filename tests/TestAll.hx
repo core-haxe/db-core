@@ -13,6 +13,7 @@ class TestAll {
         
         runner.addCase(new TestBasic(sqlite()));
         runner.addCase(new TestBasicRelationships(sqlite()));
+        runner.addCase(new TestAdd(sqlite()));
 
         Report.create(runner, SuccessResultsDisplayMode.AlwaysShowSuccessResults, HeaderDisplayMode.NeverShowHeader);
         runner.run();

@@ -1,5 +1,6 @@
 package cases.util;
 
+import db.ColumnOptions;
 import db.Record;
 import db.IDatabase;
 import sys.io.File;
@@ -11,7 +12,7 @@ class DBCreator {
             File.saveContent("persons.db", "");
             db.connect().then(_ -> {
                 return db.createTable("Person", [
-                    {name: "personId", type: Number},
+                    {name: "personId", type: Number, options: [ColumnOptions.PrimaryKey]},
                     {name: "lastName", type: Text(50)},
                     {name: "firstName", type: Text(50)},
                     {name: "iconId", type: Number}
