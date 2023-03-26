@@ -38,6 +38,8 @@ class TestBasic extends Test {
             Assert.equals("Harrigan", result.data.field("lastName"));
             Assert.equals(1, result.data.field("iconId"));
             async.done();
+        }, error -> {
+            trace("error", error);
         });
     }
 
@@ -58,6 +60,8 @@ class TestBasic extends Test {
             Assert.equals(2, result.data[2].field("iconId"));
 
             async.done();
+        }, error -> {
+            trace("error", error);
         });
     }
 
@@ -72,6 +76,8 @@ class TestBasic extends Test {
             Assert.equals("Harrigan", result.data[0].field("lastName"));
             Assert.equals(1, result.data[0].field("iconId"));
             async.done();
+        }, error -> {
+            trace("error", error);
         });
     }
 
@@ -92,6 +98,8 @@ class TestBasic extends Test {
             Assert.equals(1, result.data[1].field("iconId"));
 
             async.done();
+        }, error -> {
+            trace("error", error);
         });
     }
 
@@ -107,6 +115,8 @@ class TestBasic extends Test {
             Assert.equals(1, result.data[0].field("iconId"));
 
             async.done();
+        }, error -> {
+            trace("error", error);
         });
     }
 }

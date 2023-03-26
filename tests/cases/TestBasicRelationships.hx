@@ -39,6 +39,8 @@ class TestBasicRelationships extends Test {
             Assert.equals(1, result.data.field("Person.iconId"));
             Assert.equals("/somepath/icon1.png", result.data.field("Person.Icon.path"));
             async.done();
+        }, error -> {
+            trace("error", error);
         });
     }
 
@@ -61,6 +63,8 @@ class TestBasicRelationships extends Test {
             Assert.equals("/somepath/icon2.png", result.data[2].field("Person.Icon.path"));
 
             async.done();
+        }, error -> {
+            trace("error", error);
         });
     }
 }

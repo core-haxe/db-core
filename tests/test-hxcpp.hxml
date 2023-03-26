@@ -1,9 +1,4 @@
---class-path .
---main TestAll
-
--lib utest
--lib db-core
--lib db-sqlite
+common.hxml
 
 --cpp build/hxcpp
 --cmd .\build\hxcpp\TestAll

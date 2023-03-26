@@ -43,6 +43,8 @@ class DBCreator {
                 } else {
                     resolve(true);
                 }
+            }, error -> {
+                trace("error", error);
             });
         });
     }
