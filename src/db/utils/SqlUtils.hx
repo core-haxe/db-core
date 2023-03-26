@@ -25,10 +25,12 @@ class SqlUtils {
         var fieldAliases = [];
         var sqlJoin = buildJoins(table.name, null, table.name, relationships, databaseSchema, fieldAliases);
         if (alwaysAliasResultFields == true || (fieldAliases != null && fieldAliases.length > 0)) {
-            var tableSchema = databaseSchema.findTable(table.name);
-            if (tableSchema != null) {
-                for (tableColumn in tableSchema.columns) {
-                    fieldAliases.insert(0, '${table.name}.${tableColumn.name} AS `${table.name}.${tableColumn.name}`');
+            if (databaseSchema != null) {
+                var tableSchema = databaseSchema.findTable(table.name);
+                if (tableSchema != null) {
+                    for (tableColumn in tableSchema.columns) {
+                        fieldAliases.insert(0, '${table.name}.${tableColumn.name} AS `${table.name}.${tableColumn.name}`');
+                    }
                 }
             }
         }
