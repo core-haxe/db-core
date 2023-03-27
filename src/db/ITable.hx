@@ -1,6 +1,6 @@
 package db;
 
-import db.Query.QueryExpr;
+import Query.QueryExpr;
 import promises.Promise;
 
 interface ITable {

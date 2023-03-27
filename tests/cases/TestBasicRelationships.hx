@@ -1,6 +1,6 @@
 package cases;
 
-import db.Query.*;
+import Query.*;
 import db.IDatabase;
 import utest.Assert;
 import cases.util.DBCreator;

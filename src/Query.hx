@@ -1,4 +1,4 @@
-package db;
+package;
 
 import haxe.macro.Context;
 import haxe.macro.Expr;
@@ -40,17 +40,21 @@ class Query {
         return generate(qe);
     }
 
+    public static macro function field(name:String) {
+        return macro "%" + $v{name};
+    }
+
     #if macro
 
     private static function generate(qe:QueryExpr):haxe.macro.Expr {
         return switch (qe) {
-            case QueryValue(e): macro QueryValue($e);
-            case QueryBinop(op, e1, e2): macro QueryBinop($i{haxe.EnumTools.EnumValueTools.getName(op)}, $e{generate(e1)}, $e{generate(e2)});
-            case QueryParenthesis(e): macro QueryParenthesis($e{generate(e)});
-            case QueryConstant(c): macro QueryConstant($i{haxe.EnumTools.EnumValueTools.getName(c)}($a{
+            case QueryValue(e): macro Query.QueryExpr.QueryValue($e);
+            case QueryBinop(op, e1, e2): macro Query.QueryExpr.QueryBinop($i{haxe.EnumTools.EnumValueTools.getName(op)}, $e{generate(e1)}, $e{generate(e2)});
+            case QueryParenthesis(e): macro Query.QueryExpr.QueryParenthesis($e{generate(e)});
+            case QueryConstant(c): macro Query.QueryExpr.QueryConstant($i{haxe.EnumTools.EnumValueTools.getName(c)}($a{
                 haxe.EnumTools.EnumValueTools.getParameters(c).map(p -> macro $v{p})
             }));
-            case QueryUnsupported(v): macro QueryUnsupported($v{v});
+            case QueryUnsupported(v): macro Query.QueryExpr.QueryUnsupported($v{v});
         }
     }
 
@@ -137,21 +141,7 @@ class Query {
                 queryExprPartToSql(e, sb, values, fieldPrefix);
                 sb.add(")");
             case QueryConstant(QIdent(s)): 
-                var full = s;
-                if (fieldPrefix != null) {
-                    full = fieldPrefix + "." + s;
-                }
-                if (full.contains(".")) {
-                    var parts = full.split(".");
-                    var field = parts.pop();
-                    sb.add("`");
-                    sb.add(parts.join("."));
-                    sb.add("`.`");
-                    sb.add(field);
-                    sb.add("`");
-                } else {
-                    sb.add(full);
-                }
+                sb.add(buildColumn(s, fieldPrefix));
             case QueryConstant(QInt(s)):    
                 if (values == null) {
                     sb.add(s);
@@ -181,14 +171,42 @@ class Query {
                     sb.add(newArray.join(", "));
                     sb.add(")");
                 } else if (values == null) {
-                    sb.add(v);
+                    if (Std.string(v).startsWith("%")) { // lets add a special case for %field, this is so we can construct query in macros (where $ means something different)
+                        sb.add(buildColumn(Std.string(v).substring(1), fieldPrefix));
+                    } else {
+                        sb.add(v);
+                    }
                 } else {
-                    values.push(v);
-                    sb.add("?");
+                    if (Std.string(v).startsWith("%")) { // lets add a special case for %field, this is so we can construct query in macros (where $ means something different)
+                        sb.add(buildColumn(Std.string(v).substring(1), fieldPrefix));
+                    } else {
+                        values.push(v);
+                        sb.add("?");
+                    }
                 }
             case QueryUnsupported(v):
                 trace("WARNING: unsupported query expression encountered:", v);
             case _:    
         }
+    }
+
+    private static function buildColumn(s:String, fieldPrefix:String):String {
+        var full = s;
+        if (fieldPrefix != null) {
+            full = fieldPrefix + "." + s;
+        }
+        var sb:StringBuf = new StringBuf();
+        if (full.contains(".")) {
+            var parts = full.split(".");
+            var field = parts.pop();
+            sb.add("`");
+            sb.add(parts.join("."));
+            sb.add("`.`");
+            sb.add(field);
+            sb.add("`");
+        } else {
+            sb.add(full);
+        }
+        return sb.toString();
     }
 }

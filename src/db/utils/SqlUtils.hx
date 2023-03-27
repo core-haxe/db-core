@@ -1,6 +1,6 @@
 package db.utils;
 
-import db.Query.QueryExpr;
+import Query.QueryExpr;
 
 using StringTools;
 
