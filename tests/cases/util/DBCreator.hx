@@ -1,5 +1,6 @@
 package cases.util;
 
+import haxe.io.Bytes;
 import db.ColumnOptions;
 import db.Record;
 import db.IDatabase;
@@ -15,7 +16,8 @@ class DBCreator {
                     {name: "personId", type: Number, options: [ColumnOptions.PrimaryKey]},
                     {name: "lastName", type: Text(50)},
                     {name: "firstName", type: Text(50)},
-                    {name: "iconId", type: Number}
+                    {name: "iconId", type: Number},
+                    {name: "contractDocument", type: Binary}
                 ]);
             }).then(_ -> {
                 return db.createTable("Icon", [
@@ -62,7 +64,7 @@ class DBCreator {
                 return db.table("Person");
             }).then(result -> {
                 return result.table.addAll([
-                    Person(1, 'Ian', 'Harrigan', 1),
+                    Person(1, 'Ian', 'Harrigan', 1, Bytes.ofString("this is ians contract document")),
                     Person(2, 'Bob', 'Barker', 3),
                     Person(3, 'Tim', 'Mallot', 2),
                     Person(4, 'Jim', 'Parker', 1)
@@ -102,12 +104,15 @@ class DBCreator {
         return r;
     }
 
-    private static function Person(personId:Int, firstName:String, lastName:String, iconId:Int):Record {
+    private static function Person(personId:Int, firstName:String, lastName:String, iconId:Int, contractDocument:Bytes = null):Record {
         var r = new Record();
         r.field("personId", personId);
         r.field("firstName", firstName);
         r.field("lastName", lastName);
         r.field("iconId", iconId);
+        if (contractDocument != null) {
+            r.field("contractDocument", contractDocument);
+        }
         return r;
     }
 

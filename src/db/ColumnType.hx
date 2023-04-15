@@ -6,4 +6,5 @@ enum ColumnType {
     Boolean;
     Text(n:Int);
     Memo;
+    Binary;
 }
