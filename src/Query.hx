@@ -11,6 +11,10 @@ enum QBinop {
     QOpBoolAnd;
     QOpBoolOr;
     QOpNotEq;
+    QOpGt;
+    QOpLt;
+    QOpGte;
+    QOpLte;
     QOpIn;
     QOpUnsupported(v:String);
 }
@@ -66,6 +70,10 @@ class Query {
                     case OpBoolAnd:     QBinop.QOpBoolAnd;
                     case OpBoolOr:      QBinop.QOpBoolOr;
                     case OpNotEq:       QBinop.QOpNotEq;
+                    case OpGt:          QBinop.QOpGt;
+                    case OpLt:          QBinop.QOpLt;
+                    case OpGte:         QBinop.QOpGte;
+                    case OpLte:         QBinop.QOpLte;
                     case OpIn:          QBinop.QOpIn;
                     case _:  
                         trace("unsupported", op, op.getName());
@@ -130,6 +138,10 @@ class Query {
                     case QOpBoolAnd:            sb.add(" AND ");
                     case QOpBoolOr:             sb.add(" OR ");
                     case QOpNotEq:              sb.add(" <> ");
+                    case QOpGt:                 sb.add(" > ");
+                    case QOpLt:                 sb.add(" < ");
+                    case QOpGte:                 sb.add(" >= ");
+                    case QOpLte:                 sb.add(" <= ");
                     case QOpIn:                 sb.add(" IN ");
                     case QOpUnsupported(v):    
                         trace("WARNING: unsupported binary operation encountered:", v);
@@ -180,7 +192,13 @@ class Query {
                     if (Std.string(v).startsWith("%")) { // lets add a special case for %field, this is so we can construct query in macros (where $ means something different)
                         sb.add(buildColumn(Std.string(v).substring(1), fieldPrefix));
                     } else {
-                        values.push(v);
+                        if ((v is Date)) {
+                            var date:Date = cast v;
+                            var dateString = date.toString().replace(" ", "T") + "Z";
+                            values.push(dateString);
+                        } else {
+                            values.push(v);
+                        }
                         sb.add("?");
                     }
                 }
