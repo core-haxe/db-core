@@ -66,27 +66,25 @@ class SqlUtils {
 
         for (tableRelationship in tableRelationships) {
             var table1 = tableRelationship.table1;
-            if (prefix != null) {
-                table1 = prefix + "." + table1;
-            }
             var field1 = tableRelationship.field1;
             var table2 = tableRelationship.table2;
             var field2 = tableRelationship.field2;
-            var joinName = tableRelationship.table1 + "." + table2;
-            if (prefix != null) {
-                joinName = prefix + "." + joinName;
+            if (prefix == null) {
+                prefix = table1;
             }
+            var joinName = prefix + "." + field1 + "." + table2 + "." + field2;
 
             var tableSchema = databaseSchema.findTable(table2);
             if (tableSchema == null) {
                 continue;
             }
+
             for (tableColumn in tableSchema.columns) {
-                fieldAliases.push('`${joinName}`.`${tableColumn.name}` AS `${fieldNamePrefix}.${table2}.${tableColumn.name}`');
+                fieldAliases.push('`${joinName}`.`${tableColumn.name}` AS `${joinName}.${tableColumn.name}`');
             }
 
-            sql += '\n    LEFT JOIN `${table2}` AS `${joinName}` ON `${joinName}`.`${field2}` = `${table1}`.`${field1}`';
-            sql += buildJoins(table2, table1, fieldNamePrefix + "." + table2, relationships, databaseSchema, fieldAliases);
+            sql += '\n    LEFT JOIN `${table2}` AS `${joinName}` ON `${joinName}`.`${field2}` = `${prefix}`.`${field1}`';
+            sql += buildJoins(table2, joinName, fieldNamePrefix + "." + table2, relationships, databaseSchema, fieldAliases);
         }
         
         return sql;
