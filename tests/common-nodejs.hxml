@@ -5,3 +5,5 @@
 -lib db-core
 -lib db-sqlite
 -lib hxnodejs
+
+-D no-deprecation-warnings

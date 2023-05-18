@@ -38,6 +38,8 @@ class DBCreator {
             }).then(_ -> {
                 if (defineRelationships) {
                     db.defineTableRelationship("Person.iconId", "Icon.iconId");
+                    db.defineTableRelationship("Person.personId", "Person_Organization.Person_personId");
+                    db.defineTableRelationship("Person_Organization.Organization_organizationId", "Organization.organizationId");
                 }
                 if (createDummyData) {
                     addDummyData(db).then(_ -> {

@@ -5,7 +5,7 @@ import promises.Promise;
 interface IDatabase {
     public function config(details:Dynamic):Void;
     public function setProperty(name:String, value:Any):Void;
-    public function getProperty(name:String):Any;
+    public function getProperty(name:String, defaultValue:Any):Any;
 
     public function schema():Promise<DatabaseResult<DatabaseSchema>>;
 

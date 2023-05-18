@@ -21,9 +21,9 @@ class SqlUtils {
     }
 
     public static function buildSelect(table:ITable, query:QueryExpr = null, limit:Null<Int> = null, values:Array<Any> = null, relationships:RelationshipDefinitions = null, databaseSchema:DatabaseSchema = null):String {
-        var alwaysAliasResultFields:Bool = table.db.getProperty("alwaysAliasResultFields");
+        var alwaysAliasResultFields:Bool = table.db.getProperty("alwaysAliasResultFields", false);
         var fieldAliases = [];
-        var sqlJoin = buildJoins(table.name, null, table.name, relationships, databaseSchema, fieldAliases);
+        var sqlJoin = buildJoins(table.name, null, relationships, databaseSchema, fieldAliases);
         if (alwaysAliasResultFields == true || (fieldAliases != null && fieldAliases.length > 0)) {
             if (databaseSchema != null) {
                 var tableSchema = databaseSchema.findTable(table.name);
@@ -52,7 +52,7 @@ class SqlUtils {
         return sql;
     }
 
-    private static function buildJoins(tableName:String, prefix:String, fieldNamePrefix:String, relationships:RelationshipDefinitions, databaseSchema:DatabaseSchema, fieldAliases:Array<String>) {
+    private static function buildJoins(tableName:String, prefix:String, relationships:RelationshipDefinitions, databaseSchema:DatabaseSchema, fieldAliases:Array<String>) {
         if (relationships == null) {
             return "";
         }
@@ -72,7 +72,10 @@ class SqlUtils {
             if (prefix == null) {
                 prefix = table1;
             }
-            var joinName = prefix + "." + field1 + "." + table2 + "." + field2;
+            var joinName = table1 + "." + table2;
+            if (relationships.complexRelationships) {
+                joinName = prefix + "." + field1 + "." + table2 + "." + field2;
+            }
 
             var tableSchema = databaseSchema.findTable(table2);
             if (tableSchema == null) {
@@ -84,7 +87,7 @@ class SqlUtils {
             }
 
             sql += '\n    LEFT JOIN `${table2}` AS `${joinName}` ON `${joinName}`.`${field2}` = `${prefix}`.`${field1}`';
-            sql += buildJoins(table2, joinName, fieldNamePrefix + "." + table2, relationships, databaseSchema, fieldAliases);
+            sql += buildJoins(table2, joinName, relationships, databaseSchema, fieldAliases);
         }
         
         return sql;

@@ -1,6 +1,8 @@
 package db;
 
 class RelationshipDefinitions {
+    public var complexRelationships:Bool = false;
+
     private var _defs:Map<String, Array<RelationshipDefinition>> = [];
 
     public function new() {
