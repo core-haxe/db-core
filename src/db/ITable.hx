@@ -11,7 +11,7 @@ interface ITable {
     public function schema():Promise<DatabaseResult<TableSchema>>;
 
     public function all():Promise<DatabaseResult<Array<Record>>>;
-    public function page(pageIndex:Int, pageSize:Int = 100, query:QueryExpr = null):Promise<DatabaseResult<Array<Record>>>;
+    public function page(pageIndex:Int, pageSize:Int = 100, query:QueryExpr = null, allowRelationships:Bool = true):Promise<DatabaseResult<Array<Record>>>;
     public function add(record:Record):Promise<DatabaseResult<Record>>;
     public function addAll(records:Array<Record>):Promise<DatabaseResult<Array<Record>>>;
     public function delete(record:Record):Promise<DatabaseResult<Record>>;
