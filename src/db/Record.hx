@@ -43,6 +43,14 @@ class Record {
         return v;
     }
 
+    public function stringValues():Array<String> {
+        var v = [];
+        for (k in data.keys()) {
+            v.push(Std.string(data.get(k)));
+        }
+        return v;
+    }
+
     public function removeField(name:String) {
         data.remove(name);
     }
