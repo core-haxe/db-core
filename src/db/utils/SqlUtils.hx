@@ -20,7 +20,7 @@ class SqlUtils {
         return sql;
     }
 
-    public static function buildSelect(table:ITable, query:QueryExpr = null, limit:Null<Int> = null, values:Array<Any> = null, relationships:RelationshipDefinitions = null, databaseSchema:DatabaseSchema = null):String {
+    public static function buildSelect(table:ITable, query:QueryExpr = null, limit:Null<Int> = null, offset:Null<Int> = null, values:Array<Any> = null, relationships:RelationshipDefinitions = null, databaseSchema:DatabaseSchema = null):String {
         var alwaysAliasResultFields:Bool = table.db.getProperty("alwaysAliasResultFields", false);
         var fieldAliases = [];
         var sqlJoin = buildJoins(table.name, null, relationships, databaseSchema, fieldAliases);
@@ -47,6 +47,9 @@ class SqlUtils {
         }
         if (limit != null) {
             sql += ' LIMIT ' + limit;
+        }
+        if (offset != null) {
+            sql += ' OFFSET ' + offset;
         }
         sql += ';';
         return sql;
