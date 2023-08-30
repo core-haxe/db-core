@@ -21,4 +21,5 @@ interface ITable {
     public function findOne(query:QueryExpr, allowRelationships:Bool = true):Promise<DatabaseResult<Record>>;
 
     public function addColumn(column:ColumnDefinition):Promise<DatabaseResult<Bool>>;
+    public function removeColumn(column:ColumnDefinition):Promise<DatabaseResult<Bool>>;
 }
