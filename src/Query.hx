@@ -124,6 +124,9 @@ class Query {
     #end
 
     public static function queryExprToSql(qe:QueryExpr, values:Array<Any> = null, fieldPrefix:String = null):String {
+        if (qe == null) {
+            return null;
+        }
         var sb = new StringBuf();
         queryExprPartToSql(qe, sb, values, fieldPrefix);
         return sb.toString();
