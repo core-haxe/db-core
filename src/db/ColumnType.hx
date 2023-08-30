@@ -7,4 +7,5 @@ enum ColumnType {
     Text(n:Int);
     Memo;
     Binary;
+    Unknown;
 }
