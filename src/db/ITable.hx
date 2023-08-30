@@ -9,6 +9,7 @@ interface ITable {
     public var exists:Bool;
 
     public function schema():Promise<DatabaseResult<TableSchema>>;
+    public function applySchema(newSchema:TableSchema):Promise<DatabaseResult<TableSchema>>;
 
     public function all():Promise<DatabaseResult<Array<Record>>>;
     public function page(pageIndex:Int, pageSize:Int = 100, query:QueryExpr = null, allowRelationships:Bool = true):Promise<DatabaseResult<Array<Record>>>;
