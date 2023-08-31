@@ -20,6 +20,7 @@ interface ITable {
     public function update(query:QueryExpr, record:Record):Promise<DatabaseResult<Record>>;
     public function find(query:QueryExpr, allowRelationships:Bool = true):Promise<DatabaseResult<Array<Record>>>;
     public function findOne(query:QueryExpr, allowRelationships:Bool = true):Promise<DatabaseResult<Record>>;
+    public function findUnique(columnName:String, query:QueryExpr = null, allowRelationships:Bool = true):Promise<DatabaseResult<Array<Record>>>;
 
     public function addColumn(column:ColumnDefinition):Promise<DatabaseResult<Bool>>;
     public function removeColumn(column:ColumnDefinition):Promise<DatabaseResult<Bool>>;

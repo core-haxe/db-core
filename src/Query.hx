@@ -35,6 +35,7 @@ enum QueryExpr {
     #else
     QueryValue(v:Any);
     #end
+    QueryCall(name:String, params:Array<QueryExpr>);
     QueryUnsupported(v:String);
 }
 
@@ -58,6 +59,7 @@ class Query {
             case QueryConstant(c): macro Query.QueryExpr.QueryConstant($i{haxe.EnumTools.EnumValueTools.getName(c)}($a{
                 haxe.EnumTools.EnumValueTools.getParameters(c).map(p -> macro $v{p})
             }));
+            case QueryCall(name, params): macro Query.QueryExpr.QueryCall($v{name}, $v{params});
             case QueryUnsupported(v): macro Query.QueryExpr.QueryUnsupported($v{v});
         }
     }
@@ -85,7 +87,11 @@ class Query {
             case EConst(CIdent(s)):
                 if (s.startsWith("$")) {
                     var varName = s.substr(1);
-                    QueryConstant(QIdent(varName));
+                    if (varName == "distinct") {
+                        QueryCall(varName, null);
+                    } else {
+                        QueryConstant(QIdent(varName));
+                    }
                 } else {
                     QueryValue(macro @:pos(e.pos) $i{s});
                 }
@@ -114,6 +120,12 @@ class Query {
             case ECall(e, params):
                 switch (exprToQueryExpr(e)) {
                     case QueryValue(e):  QueryValue(macro @:pos(e.pos) $e($a{params}));
+                    case QueryCall(name, _):
+                        var a = [];
+                        for (p in params) {
+                            a.push(exprToQueryExpr(p));
+                        }
+                        QueryCall(name, a);
                     case qe:             qe;
                 }
             case _:
@@ -205,6 +217,17 @@ class Query {
                         sb.add("?");
                     }
                 }
+            case QueryCall(name, params):
+                sb.add(name);
+                sb.add("(");
+                var paramStrings = [];
+                for (p in params) {
+                    var temp = new StringBuf();
+                    queryExprPartToSql(p, temp, values, fieldPrefix);
+                    paramStrings.push(temp.toString());
+                }
+                sb.add(paramStrings.join(", "));
+                sb.add(")");
             case QueryUnsupported(v):
                 trace("WARNING: unsupported query expression encountered:", v);
             case _:    

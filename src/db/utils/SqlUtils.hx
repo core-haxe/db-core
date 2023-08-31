@@ -55,6 +55,32 @@ class SqlUtils {
         return sql;
     }
 
+    public static function buildDistinctSelect(table:ITable, query:QueryExpr = null, distinctColumn:String = null, limit:Null<Int> = null, offset:Null<Int> = null, values:Array<Any> = null, relationships:RelationshipDefinitions = null, databaseSchema:DatabaseSchema = null):String {
+        var alwaysAliasResultFields:Bool = table.db.getProperty("alwaysAliasResultFields", false);
+        var fieldAliases = [];
+
+        var fieldList = '*';
+        if (distinctColumn != null) {
+            fieldAliases.push('distinct(${distinctColumn})');
+        }
+        if (fieldAliases.length > 0) {
+            fieldList = fieldAliases.join(", ");
+        }
+        var sql = 'SELECT ${fieldList} FROM ${table.name}';
+
+        if (query != null) {
+            sql += '\nWHERE (${Query.queryExprToSql(query, values, table.name)})';
+        }
+        if (limit != null) {
+            sql += ' LIMIT ' + limit;
+        }
+        if (offset != null) {
+            sql += ' OFFSET ' + offset;
+        }
+        sql += ';';
+        return sql;
+    }
+
     private static function buildJoins(tableName:String, prefix:String, relationships:RelationshipDefinitions, databaseSchema:DatabaseSchema, fieldAliases:Array<String>) {
         if (relationships == null) {
             return "";
