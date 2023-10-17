@@ -49,6 +49,23 @@ class Query {
         return macro "%" + $v{name};
     }
 
+    public static function joinQueryParts(parts:Array<QueryExpr>, op:QBinop) {
+        var query:QueryExpr = null;
+        if (parts.length > 1) {
+            var last = parts.pop();
+            var beforeLast = parts.pop();
+            var qp = QueryBinop(op, beforeLast, last);
+            while (parts.length > 0) {
+                var q = parts.pop();
+                qp = QueryBinop(op, q, qp);
+            }
+            query = qp;
+        } else {
+            query = parts[0];
+        }
+        return query;
+    }
+
     #if macro
 
     private static function generate(qe:QueryExpr):haxe.macro.Expr {
