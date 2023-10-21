@@ -6,7 +6,7 @@ class DatabaseSchema {
 
     public function findTable(name:String):TableSchema {
         for (t in tables) {
-            if (t.name == name) {
+            if (t.name.toLowerCase() == name.toLowerCase()) {
                 return t;
             }
         }
