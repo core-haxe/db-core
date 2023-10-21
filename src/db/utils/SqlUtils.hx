@@ -138,9 +138,13 @@ class SqlUtils {
         var sql = 'DELETE FROM ${table.name} WHERE ';
         var placeholders = [];
         for (f in record.fieldNames) {
+            var v = record.field(f);
+            if ((v is Bytes)) {
+                continue;
+            }
             placeholders.push('${f} = ?');
             if (values != null) {
-                values.push(record.field(f));
+                values.push(v);
             }
         }
         sql += '(${placeholders.join(" AND ")})';
