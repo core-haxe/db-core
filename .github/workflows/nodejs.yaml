@@ -35,6 +35,8 @@ jobs:
         haxelib dev db-core db-core
         git clone https://github.com/core-haxe/db-sqlite
         haxelib dev db-sqlite db-sqlite
+        git clone https://github.com/core-haxe/mysql
+        haxelib dev mysql mysql
         git clone https://github.com/core-haxe/db-mysql
         haxelib dev db-mysql db-mysql
         cp -f tests/package.json .
