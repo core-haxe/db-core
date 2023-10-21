@@ -55,6 +55,17 @@ class SqlUtils {
         return sql;
     }
 
+    public static function buildCount(table:ITable, query:QueryExpr = null, values:Array<Any> = null):String {
+        var fieldList = 'COUNT(*)';
+        var sql = 'SELECT ${fieldList} FROM ${table.name}';
+
+        if (query != null) {
+            sql += '\nWHERE (${Query.queryExprToSql(query, values)})';
+        }
+        sql += ';';
+        return sql;
+    }
+
     public static function buildDistinctSelect(table:ITable, query:QueryExpr = null, distinctColumn:String = null, limit:Null<Int> = null, offset:Null<Int> = null, values:Array<Any> = null, relationships:RelationshipDefinitions = null, databaseSchema:DatabaseSchema = null):String {
         var alwaysAliasResultFields:Bool = table.db.getProperty("alwaysAliasResultFields", false);
         var fieldAliases = [];
