@@ -1,11 +1,12 @@
 package db.utils;
 
 import Query.QueryExpr;
+import haxe.io.Bytes;
 
 using StringTools;
 
 class SqlUtils {
-    public static function buildInsert(table:ITable, record:Record, values:Array<Any> = null):String {
+    public static function buildInsert(table:ITable, record:Record, values:Array<Any> = null, typeMapper:IDataTypeMapper = null):String {
         var fieldNames = fieldNamesFromRecord(record);
         var sql = 'INSERT INTO ${table.name} (${fieldNames.join(", ")}) VALUES ';
         var placeholders = [];
@@ -13,6 +14,15 @@ class SqlUtils {
             placeholders.push('?');
             if (values != null) {
                 values.push(record.field(f));
+            }
+        }
+        if (typeMapper != null) {
+            for (i in 0...values.length) {
+                var v = values[i];
+                if (typeMapper.shouldConvertValueToDatabase(v)) {
+                    v = typeMapper.convertValueToDatabase(v);
+                    values[i] = v;
+                }
             }
         }
         sql += '(${placeholders.join(", ")})';
@@ -161,7 +171,7 @@ class SqlUtils {
         return sql;
     }
 
-    public static function buildUpdate(table:ITable, query:QueryExpr, record:Record, values:Array<Any> = null):String {
+    public static function buildUpdate(table:ITable, query:QueryExpr, record:Record, values:Array<Any> = null, typeMapper:IDataTypeMapper = null):String {
         var fieldNames = fieldNamesFromRecord(record);
         var sql = 'UPDATE ${table.name} SET ';
         var placeholders = [];
@@ -170,6 +180,9 @@ class SqlUtils {
             if (v == null) {
                 placeholders.push('${f} = NULL');
             } else {
+                if (typeMapper != null && typeMapper.shouldConvertValueToDatabase(v)) {
+                    v = typeMapper.convertValueToDatabase(v);
+                }
                 placeholders.push('${f} = ?');
                 if (values != null) {
                     values.push(v);
