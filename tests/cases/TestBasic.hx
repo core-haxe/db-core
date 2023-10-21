@@ -43,6 +43,20 @@ class TestBasic extends Test {
         });
     }
 
+    function testBasicFindOne_Alt(async:Async) {
+        db.table("Person").then(result -> {
+            return result.table.findOne(query($personId = 2));
+        }).then(result -> {
+            Assert.equals(2, result.data.field("personId"));
+            Assert.equals("Bob", result.data.field("firstName"));
+            Assert.equals("Barker", result.data.field("lastName"));
+            Assert.equals(3, result.data.field("iconId"));
+            async.done();
+        }, error -> {
+            trace("error", error);
+        });
+    }
+
     function testBasicAll(async:Async) {
         db.table("Person").then(result -> {
             return result.table.all();

@@ -1,13 +1,13 @@
 package cases;
 
-import db.Record;
+import Query.*;
+import db.IDatabase;
 import utest.Assert;
 import cases.util.DBCreator;
 import utest.Async;
-import db.IDatabase;
 import utest.Test;
 
-class TestAdd extends Test {
+class TestCount extends Test {
     private var db:IDatabase;
 
     public function new(db:IDatabase) {
@@ -29,22 +29,33 @@ class TestAdd extends Test {
         async.done();
     }
 
-    function testBasicAdd(async:Async) {
+    function testBasicCount(async:Async) {
         db.table("Person").then(result -> {
-            var record = new Record();
-            record.field("lastName", "new last name");
-            record.field("firstName", "new first name");
-            record.field("iconId", 1);
-            return result.table.add(record);
+            return result.table.all();
         }).then(result -> {
-            Assert.equals(5, result.data.field("_insertedId"));
-            Assert.equals("new first name", result.data.field("firstName"));
-            Assert.equals("new last name", result.data.field("lastName"));
-            Assert.equals(1, result.data.field("iconId"));
+            Assert.equals(4, result.data.length);
+
+            return result.table.count();
+        }).then(result -> {
+            Assert.equals(4, result.data);
             async.done();
         }, error -> {
             trace("error", error);
         });
     }
-    
+
+    function testBasicCountWhere(async:Async) {
+        db.table("Person").then(result -> {
+            return result.table.all();
+        }).then(result -> {
+            Assert.equals(4, result.data.length);
+
+            return result.table.count(query($personId = 1 || $personId = 2));
+        }).then(result -> {
+            Assert.equals(2, result.data);
+            async.done();
+        }, error -> {
+            trace("error", error);
+        });
+    }
 }

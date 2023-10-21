@@ -1,5 +1,7 @@
 package cases.util;
 
+import db.sqlite.SqliteDatabase;
+import promises.PromiseUtils;
 import haxe.io.Bytes;
 import db.ColumnOptions;
 import db.Record;
@@ -10,10 +12,22 @@ import promises.Promise;
 class DBCreator {
     public static function create(db:IDatabase, defineRelationships:Bool = false, createDummyData:Bool = true):Promise<Bool> {
         return new Promise((resolve, reject) -> {
-            File.saveContent("persons.db", "");
+            if ((db is SqliteDatabase)) {
+                File.saveContent("persons.db", "");
+            }
             db.connect().then(_ -> {
+                if ((db is SqliteDatabase)) {
+                    return null;
+                }
+                return db.delete();
+            }).then(_ -> {
+                if ((db is SqliteDatabase)) {
+                    return null;
+                }
+                return db.create();
+            }).then(_ -> {
                 return db.createTable("Person", [
-                    {name: "personId", type: Number, options: [ColumnOptions.PrimaryKey]},
+                    {name: "personId", type: Number, options: [ColumnOptions.PrimaryKey, ColumnOptions.AutoIncrement]},
                     {name: "lastName", type: Text(50)},
                     {name: "firstName", type: Text(50)},
                     {name: "iconId", type: Number},
@@ -49,6 +63,7 @@ class DBCreator {
                     resolve(true);
                 }
             }, error -> {
+                trace(haxe.Json.stringify(error));
                 trace("error", error);
             });
         });

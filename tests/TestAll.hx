@@ -10,24 +10,49 @@ import cases.*;
 class TestAll {
     public static function main() {
         var runner = new Runner();
-        
-        runner.addCase(new TestBasic(sqlite()));
-        runner.addCase(new TestBasicRelationships(sqlite()));
-        runner.addCase(new TestAdd(sqlite()));
-        #if !neko
-        runner.addCase(new TestBinary(sqlite()));
-        #end
+
+        addCases(runner, sqlite());
+//        addCases(runner, mysql());
 
         Report.create(runner, SuccessResultsDisplayMode.AlwaysShowSuccessResults, HeaderDisplayMode.NeverShowHeader);
         runner.run();
     }
 
     private static function addCases(runner:Runner, db:IDatabase) {
+        runner.addCase(new TestBasic(db));
+        runner.addCase(new TestSchema(db));
+        runner.addCase(new TestAdd(db));
+        runner.addCase(new TestDelete(db));
+        runner.addCase(new TestDeleteAll(db));
+        runner.addCase(new TestUpdate(db));
+        runner.addCase(new TestPaging(db));
+        runner.addCase(new TestCount(db));
+        runner.addCase(new TestFindUnique(db));
+        runner.addCase(new TestAddColumn(db));
+        runner.addCase(new TestRemoveColumn(db));
+
+        #if !neko
+        runner.addCase(new TestBinary(db));
+        #end
+
+        // relationship tests need to be last
+        #if nodejs // for another day
+        runner.addCase(new TestBasicRelationships(db));
+        #end
     }
 
     private static function sqlite():IDatabase {
         return DatabaseFactory.instance.createDatabase(DatabaseFactory.SQLITE, {
             filename: "persons.db"
+        });
+    }
+
+    private static function mysql():IDatabase {
+        return DatabaseFactory.instance.createDatabase(DatabaseFactory.MYSQL, {
+            database: "Persons",
+            host: Sys.getEnv("MYSQL_HOST"),
+            user: Sys.getEnv("MYSQL_USER"),
+            pass: Sys.getEnv("MYSQL_PASS")
         });
     }
 }

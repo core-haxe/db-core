@@ -1,11 +1,10 @@
 package cases;
 
-import haxe.io.Bytes;
 import db.Record;
+import haxe.io.Bytes;
 import utest.Assert;
 import cases.util.DBCreator;
 import utest.Async;
-import db.IDatabase;
 import db.IDatabase;
 import utest.Test;
 import Query.*;
