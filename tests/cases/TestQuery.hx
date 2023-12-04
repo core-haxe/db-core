@@ -90,4 +90,84 @@ class TestQuery extends Test {
             trace("error", error);
         });
     }
+
+    function testBasicQuery_VarColumn(async:Async) {
+        var columnName = "personId";
+        db.table("Person").then(result -> {
+            return result.table.find(query(columnName = 1));
+        }).then(result -> {
+            Assert.equals(1, result.data.length);
+            Assert.equals(1, result.data[0].field("personId"));
+            Assert.equals("Ian", result.data[0].field("firstName"));
+            Assert.equals("Harrigan", result.data[0].field("lastName"));
+            Assert.equals(1, result.data[0].field("iconId"));
+            async.done();
+        }, error -> {
+            trace("error", error);
+        });
+    }
+
+    function testBasicQuery_And_NoResults(async:Async) {
+        db.table("Person").then(result -> {
+            return result.table.find(query($personId = 1 && $personId = 2));
+        }).then(result -> {
+            Assert.equals(0, result.data.length);
+            async.done();
+        }, error -> {
+            trace("error", error);
+        });
+    }
+
+    function testBasicQuery_And_Results(async:Async) {
+        db.table("Person").then(result -> {
+            return result.table.find(query($personId = 1 && $firstName = "Ian" && $lastName = "Harrigan"));
+        }).then(result -> {
+            Assert.equals(1, result.data.length);
+            Assert.equals(1, result.data[0].field("personId"));
+            Assert.equals("Ian", result.data[0].field("firstName"));
+            Assert.equals("Harrigan", result.data[0].field("lastName"));
+            Assert.equals(1, result.data[0].field("iconId"));
+            async.done();
+        }, error -> {
+            trace("error", error);
+        });
+    }
+
+    function testBasicQuery_Or_Results(async:Async) {
+        db.table("Person").then(result -> {
+            return result.table.find(query($personId = 1 || $personId = 2));
+        }).then(result -> {
+            Assert.equals(2, result.data.length);
+
+            Assert.equals(1, result.data[0].field("personId"));
+            Assert.equals("Ian", result.data[0].field("firstName"));
+            Assert.equals("Harrigan", result.data[0].field("lastName"));
+            Assert.equals(1, result.data[0].field("iconId"));
+
+            Assert.equals(2, result.data[1].field("personId"));
+            Assert.equals("Bob", result.data[1].field("firstName"));
+            Assert.equals("Barker", result.data[1].field("lastName"));
+            Assert.equals(3, result.data[1].field("iconId"));
+            
+            async.done();
+        }, error -> {
+            trace("error", error);
+        });
+    }
+
+    function testBasicQuery_AndOr_Results(async:Async) {
+        db.table("Person").then(result -> {
+            return result.table.find(query(($personId = 1 || $personId = 2) && $firstName = "Ian" && $lastName = "Harrigan"));
+        }).then(result -> {
+            Assert.equals(1, result.data.length);
+            Assert.equals(1, result.data[0].field("personId"));
+            Assert.equals("Ian", result.data[0].field("firstName"));
+            Assert.equals("Harrigan", result.data[0].field("lastName"));
+            Assert.equals(1, result.data[0].field("iconId"));
+            
+            async.done();
+        }, error -> {
+            trace("error", error);
+        });
+    }
 }
