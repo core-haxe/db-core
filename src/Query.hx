@@ -173,7 +173,7 @@ class Query {
     private static function queryExprPartToSql(qe:QueryExpr, sb:StringBuf, values:Array<Any>, fieldPrefix:String) {
         switch (qe) {
             case QueryBinop(op, e1, e2):
-                queryExprPartToSql(e1, sb, values, fieldPrefix);
+                queryExprPartToSql(e1, sb, null, fieldPrefix);
                 switch (op) {
                     case QOpAssign:             sb.add(" = ");
                     case QOpBoolAnd:            sb.add(" AND ");
