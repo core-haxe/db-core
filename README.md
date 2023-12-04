@@ -129,7 +129,7 @@ db.connect().then(result -> {
 # mysql
 
 ```haxe
-var db:IDatabase = DatabaseFactory.createDatabase(DatabaseFactory.MYSQL, {
+var db:IDatabase = DatabaseFactory.instance.createDatabase(DatabaseFactory.MYSQL, {
     database: "somedb",
     host: "localhost",
     user: "someuser",
@@ -141,7 +141,7 @@ _Note: must include [__db-mysql__](https://github.com/core-haxe/db-mysql) for pl
 # sqlite
 
 ```haxe
-var db:IDatabase = DatabaseFactory.createDatabase(DatabaseFactory.SQLITE, {
+var db:IDatabase = DatabaseFactory.instance.createDatabase(DatabaseFactory.SQLITE, {
     filename: "somedb.db"
 });
 ```
