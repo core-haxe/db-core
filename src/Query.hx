@@ -36,6 +36,7 @@ enum QueryExpr {
     QueryValue(v:Any);
     #end
     QueryCall(name:String, params:Array<QueryExpr>);
+    QueryArrayDecl(values:Array<QueryExpr>);
     QueryUnsupported(v:String);
 }
 
@@ -77,6 +78,7 @@ class Query {
                 haxe.EnumTools.EnumValueTools.getParameters(c).map(p -> macro $v{p})
             }));
             case QueryCall(name, params): macro Query.QueryExpr.QueryCall($v{name}, $v{params});
+            case QueryArrayDecl(values): macro Query.QueryExpr.QueryArrayDecl($v{values});
             case QueryUnsupported(v): macro Query.QueryExpr.QueryUnsupported($v{v});
         }
     }
@@ -145,6 +147,13 @@ class Query {
                         QueryCall(name, a);
                     case qe:             qe;
                 }
+
+            case EArrayDecl(values):    
+                var exprs = [];
+                for (v in values) {
+                    exprs.push(exprToQueryExpr(v));
+                }
+                QueryArrayDecl(exprs);
             case _:
                 trace("unsupported:", e.expr);
                 return QueryUnsupported(e.expr.getName());
@@ -241,6 +250,16 @@ class Query {
                 for (p in params) {
                     var temp = new StringBuf();
                     queryExprPartToSql(p, temp, values, fieldPrefix);
+                    paramStrings.push(temp.toString());
+                }
+                sb.add(paramStrings.join(", "));
+                sb.add(")");
+            case QueryArrayDecl(arrayValues):    
+                sb.add("(");
+                var paramStrings = [];
+                for (av in arrayValues) {
+                    var temp = new StringBuf();
+                    queryExprPartToSql(av, temp, values, fieldPrefix);
                     paramStrings.push(temp.toString());
                 }
                 sb.add(paramStrings.join(", "));
