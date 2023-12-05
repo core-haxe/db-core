@@ -5,13 +5,12 @@ import db.IDatabase;
 import utest.Assert;
 import cases.util.DBCreator;
 import utest.Async;
-import utest.Test;
+import utest.ITest;
 
-class TestBasicRelationships extends Test {
+class TestBasicRelationships implements ITest {
     private var db:IDatabase;
 
     public function new(db:IDatabase) {
-        super();
         this.db = db;
     }
 
@@ -26,7 +25,12 @@ class TestBasicRelationships extends Test {
 
     function teardownClass(async:Async) {
         logging.LogManager.instance.clearAdaptors();
-        async.done();
+        db.disconnect().then(_ -> {
+            DBCreator.cleanUp();
+            async.done();
+        }, error -> {
+            trace(error);
+        });
     }
 
     function testBasicFindOne(async:Async) {

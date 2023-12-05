@@ -6,17 +6,16 @@ import utest.Assert;
 import cases.util.DBCreator;
 import utest.Async;
 import db.IDatabase;
-import utest.Test;
+import utest.ITest;
 
-class TestAddColumn extends Test {
+class TestAddColumn implements ITest {
     private var db:IDatabase;
 
     public function new(db:IDatabase) {
-        super();
         this.db = db;
     }
 
-    function setupClass(async:Async) {
+    function setup(async:Async) {
         logging.LogManager.instance.addAdaptor(new logging.adaptors.ConsoleLogAdaptor({
             levels: [logging.LogLevel.Info, logging.LogLevel.Error]
         }));
@@ -25,14 +24,17 @@ class TestAddColumn extends Test {
         });
     }
 
-    function teardownClass(async:Async) {
+    function teardown(async:Async) {
         logging.LogManager.instance.clearAdaptors();
         db.disconnect().then(_ -> {
+            DBCreator.cleanUp();
             async.done();
+        }, error -> {
+            trace(error);
         });
     }
 
-    function testBasicSchema(async:Async) {
+    function testBasicAddColumn(async:Async) {
         db.schema().then(result -> {
             Assert.notNull(result);
 

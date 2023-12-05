@@ -5,17 +5,16 @@ import db.IDatabase;
 import utest.Assert;
 import cases.util.DBCreator;
 import utest.Async;
-import utest.Test;
+import utest.ITest;
 
-class TestPaging extends Test {
+class TestPaging implements ITest {
     private var db:IDatabase;
 
     public function new(db:IDatabase) {
-        super();
         this.db = db;
     }
 
-    function setupClass(async:Async) {
+    function setup(async:Async) {
         logging.LogManager.instance.addAdaptor(new logging.adaptors.ConsoleLogAdaptor({
             levels: [logging.LogLevel.Info, logging.LogLevel.Error]
         }));
@@ -24,9 +23,14 @@ class TestPaging extends Test {
         });
     }
 
-    function teardownClass(async:Async) {
+    function teardown(async:Async) {
         logging.LogManager.instance.clearAdaptors();
-        async.done();
+        db.disconnect().then(_ -> {
+            DBCreator.cleanUp();
+            async.done();
+        }, error -> {
+            trace(error);
+        });
     }
 
     function testBasicPaging(async:Async) {

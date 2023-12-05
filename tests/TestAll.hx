@@ -34,9 +34,9 @@ class TestAll {
 
         #if !neko
         runner.addCase(new TestBinary(db));
+        runner.addCase(new TestExport(db));
         #end
 
-        // relationship tests need to be last
         #if nodejs // for another day
         runner.addCase(new TestBasicRelationships(db));
         #end

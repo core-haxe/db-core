@@ -4,6 +4,7 @@ package db;
 class TableSchema {
     @:optional public var name:String;
     @:optional public var columns:Array<ColumnDefinition> = [];
+    @:optional public var data:Array<Record>;
 
     public function equals(other:TableSchema) {
         if (this.name != other.name) {
@@ -54,5 +55,20 @@ class TableSchema {
         }
 
         return d;
+    }
+
+    public function clone():TableSchema {
+        var c:TableSchema = {
+            name: this.name,
+            columns: []
+        };
+        c.name = this.name;
+        for (col in this.columns) {
+            c.columns.push(col.clone());
+        }
+        if (this.data != null) {
+            c.data = this.data.copy();
+        }
+        return c;
     }
 }

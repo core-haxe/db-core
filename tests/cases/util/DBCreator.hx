@@ -7,6 +7,7 @@ import db.ColumnOptions;
 import db.Record;
 import db.IDatabase;
 import sys.io.File;
+import sys.FileSystem;
 import promises.Promise;
 
 class DBCreator {
@@ -148,7 +149,11 @@ class DBCreator {
         return r;
     }
 
-    public static function delete() {
-        //FileSystem.deleteFile("persons.db");
+    public static function cleanUp() {
+        try {
+            FileSystem.deleteFile("persons.db");
+        } catch (e:Dynamic) {
+            trace(e);
+        }
     }
 }

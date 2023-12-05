@@ -21,4 +21,14 @@ class DatabaseSchema {
             }
         }
     }
+
+    public function clone():DatabaseSchema {
+        var c:DatabaseSchema = {
+            tables: []
+        };
+        for (t in this.tables) {
+            c.tables.push(t.clone());
+        }
+        return c;
+    }
 }
