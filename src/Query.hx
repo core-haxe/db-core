@@ -181,8 +181,8 @@ class Query {
                     case QOpNotEq:              sb.add(" <> ");
                     case QOpGt:                 sb.add(" > ");
                     case QOpLt:                 sb.add(" < ");
-                    case QOpGte:                 sb.add(" >= ");
-                    case QOpLte:                 sb.add(" <= ");
+                    case QOpGte:                sb.add(" >= ");
+                    case QOpLte:                sb.add(" <= ");
                     case QOpIn:                 sb.add(" IN ");
                     case QOpUnsupported(v):    
                         trace("WARNING: unsupported binary operation encountered:", v);
@@ -227,7 +227,11 @@ class Query {
                     if (Std.string(v).startsWith("%")) { // lets add a special case for %field, this is so we can construct query in macros (where $ means something different)
                         sb.add(buildColumn(Std.string(v).substring(1), fieldPrefix));
                     } else {
-                        sb.add(v);
+                        if ((v is String)) {
+                            sb.add("\"" + v + "\"");
+                        } else {
+                            sb.add(v);
+                        }
                     }
                 } else {
                     if (Std.string(v).startsWith("%")) { // lets add a special case for %field, this is so we can construct query in macros (where $ means something different)
