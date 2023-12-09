@@ -166,14 +166,15 @@ class Query {
             return null;
         }
         var sb = new StringBuf();
-        queryExprPartToSql(qe, sb, values, fieldPrefix);
+        queryExprPartToSql(qe, sb, values, fieldPrefix, false);
         return sb.toString();
     }
 
-    private static function queryExprPartToSql(qe:QueryExpr, sb:StringBuf, values:Array<Any>, fieldPrefix:String) {
+    private static function queryExprPartToSql(qe:QueryExpr, sb:StringBuf, values:Array<Any>, fieldPrefix:String, isColumn:Bool) {
         switch (qe) {
             case QueryBinop(op, e1, e2):
-                queryExprPartToSql(e1, sb, null, fieldPrefix);
+                var isColumn2 = (op == QOpAssign) || (op == QOpNotEq) || (op == QOpGt) || (op == QOpLt) || (op == QOpGte) || (op == QOpLte) || (op == QOpIn);
+                queryExprPartToSql(e1, sb, values, fieldPrefix, isColumn2);
                 switch (op) {
                     case QOpAssign:             sb.add(" = ");
                     case QOpBoolAnd:            sb.add(" AND ");
@@ -188,10 +189,10 @@ class Query {
                         trace("WARNING: unsupported binary operation encountered:", v);
                     case _:    
                 }
-                queryExprPartToSql(e2, sb, values, fieldPrefix);
+                queryExprPartToSql(e2, sb, values, fieldPrefix, isColumn);
             case QueryParenthesis(e):
                 sb.add("(");
-                queryExprPartToSql(e, sb, values, fieldPrefix);
+                queryExprPartToSql(e, sb, values, fieldPrefix, false);
                 sb.add(")");
             case QueryConstant(QIdent(s)): 
                 sb.add(buildColumn(s, fieldPrefix));
@@ -227,24 +228,24 @@ class Query {
                     if (Std.string(v).startsWith("%")) { // lets add a special case for %field, this is so we can construct query in macros (where $ means something different)
                         sb.add(buildColumn(Std.string(v).substring(1), fieldPrefix));
                     } else {
-                        if ((v is String)) {
-                            sb.add("\"" + v + "\"");
-                        } else {
-                            sb.add(v);
-                        }
+                        sb.add(v);
                     }
                 } else {
                     if (Std.string(v).startsWith("%")) { // lets add a special case for %field, this is so we can construct query in macros (where $ means something different)
                         sb.add(buildColumn(Std.string(v).substring(1), fieldPrefix));
                     } else {
-                        if ((v is Date)) {
-                            var date:Date = cast v;
-                            var dateString = date.toString().replace(" ", "T") + "Z";
-                            values.push(dateString);
+                        if (isColumn) {
+                            sb.add(buildColumn(Std.string(v), fieldPrefix));
                         } else {
-                            values.push(v);
+                            if ((v is Date)) {
+                                var date:Date = cast v;
+                                var dateString = date.toString().replace(" ", "T") + "Z";
+                                values.push(dateString);
+                            } else {
+                                values.push(v);
+                            }
+                            sb.add("?");
                         }
-                        sb.add("?");
                     }
                 }
             case QueryCall(name, params):
@@ -253,7 +254,7 @@ class Query {
                 var paramStrings = [];
                 for (p in params) {
                     var temp = new StringBuf();
-                    queryExprPartToSql(p, temp, values, fieldPrefix);
+                    queryExprPartToSql(p, temp, values, fieldPrefix, false);
                     paramStrings.push(temp.toString());
                 }
                 sb.add(paramStrings.join(", "));
@@ -263,7 +264,7 @@ class Query {
                 var paramStrings = [];
                 for (av in arrayValues) {
                     var temp = new StringBuf();
-                    queryExprPartToSql(av, temp, values, fieldPrefix);
+                    queryExprPartToSql(av, temp, values, fieldPrefix, false);
                     paramStrings.push(temp.toString());
                 }
                 sb.add(paramStrings.join(", "));
