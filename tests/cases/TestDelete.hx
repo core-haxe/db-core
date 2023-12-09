@@ -62,11 +62,7 @@ class TestDelete implements ITest {
         }).then(result -> {
             return result.table.findOne(query($personId = 1));
         }).then(result -> {
-            Assert.equals(0, result.data.fieldNames.length);
-            Assert.equals(null, result.data.field("personId"));
-            Assert.equals(null, result.data.field("firstName"));
-            Assert.equals(null, result.data.field("lastName"));
-            Assert.equals(null, result.data.field("iconId"));
+            Assert.isNull(result.data);
             return result.table.all();
         }).then(result -> {
             Assert.equals(3, result.data.length);

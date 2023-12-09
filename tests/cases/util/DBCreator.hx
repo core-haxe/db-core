@@ -151,7 +151,9 @@ class DBCreator {
 
     public static function cleanUp() {
         try {
-            FileSystem.deleteFile("persons.db");
+            if (FileSystem.exists("persons.db")) {
+                FileSystem.deleteFile("persons.db");
+            }
         } catch (e:Dynamic) {
             trace(e);
         }

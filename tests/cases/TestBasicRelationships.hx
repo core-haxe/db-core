@@ -62,49 +62,49 @@ class TestBasicRelationships implements ITest {
             Assert.equals("/somepath/icon1.png", result.data[0].field("Person.Icon.path"));
             Assert.equals("ACME Inc", result.data[0].field("Person_Organization.Organization.name"));
 
-            /* TODO: the order at which things comes back changes from db to db, need to revise test
-            Assert.equals(1, result.data[1].field("Person.personId"));
-            Assert.equals("Ian", result.data[1].field("Person.firstName"));
-            Assert.equals("Harrigan", result.data[1].field("Person.lastName"));
-            Assert.equals(1, result.data[1].field("Person.iconId"));
-            Assert.equals("/somepath/icon1.png", result.data[1].field("Person.Icon.path"));
-            Assert.equals("PASX Ltd", result.data[1].field("Person_Organization.Organization.name"));
+            // TODO: the order at which things comes back changes from db to db, need to revise test
+            // Assert.equals(1, result.data[1].field("Person.personId"));
+            // Assert.equals("Ian", result.data[1].field("Person.firstName"));
+            // Assert.equals("Harrigan", result.data[1].field("Person.lastName"));
+            // Assert.equals(1, result.data[1].field("Person.iconId"));
+            // Assert.equals("/somepath/icon1.png", result.data[1].field("Person.Icon.path"));
+            // Assert.equals("PASX Ltd", result.data[1].field("Person_Organization.Organization.name"));
 
-            Assert.equals(2, result.data[2].field("Person.personId"));
-            Assert.equals("Bob", result.data[2].field("Person.firstName"));
-            Assert.equals("Barker", result.data[2].field("Person.lastName"));
-            Assert.equals(3, result.data[2].field("Person.iconId"));
-            Assert.equals("/somepath/icon3.png", result.data[2].field("Person.Icon.path"));
-            Assert.equals("ACME Inc", result.data[2].field("Person_Organization.Organization.name"));
+            // Assert.equals(2, result.data[2].field("Person.personId"));
+            // Assert.equals("Bob", result.data[2].field("Person.firstName"));
+            // Assert.equals("Barker", result.data[2].field("Person.lastName"));
+            // Assert.equals(3, result.data[2].field("Person.iconId"));
+            // Assert.equals("/somepath/icon3.png", result.data[2].field("Person.Icon.path"));
+            // Assert.equals("ACME Inc", result.data[2].field("Person_Organization.Organization.name"));
 
-            Assert.equals(2, result.data[3].field("Person.personId"));
-            Assert.equals("Bob", result.data[3].field("Person.firstName"));
-            Assert.equals("Barker", result.data[3].field("Person.lastName"));
-            Assert.equals(3, result.data[3].field("Person.iconId"));
-            Assert.equals("/somepath/icon3.png", result.data[3].field("Person.Icon.path"));
-            Assert.equals("Haxe LLC", result.data[3].field("Person_Organization.Organization.name"));
+            // Assert.equals(2, result.data[3].field("Person.personId"));
+            // Assert.equals("Bob", result.data[3].field("Person.firstName"));
+            // Assert.equals("Barker", result.data[3].field("Person.lastName"));
+            // Assert.equals(3, result.data[3].field("Person.iconId"));
+            // Assert.equals("/somepath/icon3.png", result.data[3].field("Person.Icon.path"));
+            // Assert.equals("Haxe LLC", result.data[3].field("Person_Organization.Organization.name"));
 
-            Assert.equals(3, result.data[4].field("Person.personId"));
-            Assert.equals("Tim", result.data[4].field("Person.firstName"));
-            Assert.equals("Mallot", result.data[4].field("Person.lastName"));
-            Assert.equals(2, result.data[4].field("Person.iconId"));
-            Assert.equals("/somepath/icon2.png", result.data[4].field("Person.Icon.path"));
-            Assert.equals("ACME Inc", result.data[4].field("Person_Organization.Organization.name"));
+            // Assert.equals(3, result.data[4].field("Person.personId"));
+            // Assert.equals("Tim", result.data[4].field("Person.firstName"));
+            // Assert.equals("Mallot", result.data[4].field("Person.lastName"));
+            // Assert.equals(2, result.data[4].field("Person.iconId"));
+            // Assert.equals("/somepath/icon2.png", result.data[4].field("Person.Icon.path"));
+            // Assert.equals("ACME Inc", result.data[4].field("Person_Organization.Organization.name"));
 
-            Assert.equals(4, result.data[5].field("Person.personId"));
-            Assert.equals("Jim", result.data[5].field("Person.firstName"));
-            Assert.equals("Parker", result.data[5].field("Person.lastName"));
-            Assert.equals(1, result.data[5].field("Person.iconId"));
-            Assert.equals("/somepath/icon1.png", result.data[5].field("Person.Icon.path"));
-            Assert.equals("Haxe LLC", result.data[5].field("Person_Organization.Organization.name"));
+            // Assert.equals(4, result.data[5].field("Person.personId"));
+            // Assert.equals("Jim", result.data[5].field("Person.firstName"));
+            // Assert.equals("Parker", result.data[5].field("Person.lastName"));
+            // Assert.equals(1, result.data[5].field("Person.iconId"));
+            // Assert.equals("/somepath/icon1.png", result.data[5].field("Person.Icon.path"));
+            // Assert.equals("Haxe LLC", result.data[5].field("Person_Organization.Organization.name"));
 
-            Assert.equals(4, result.data[6].field("Person.personId"));
-            Assert.equals("Jim", result.data[6].field("Person.firstName"));
-            Assert.equals("Parker", result.data[6].field("Person.lastName"));
-            Assert.equals(1, result.data[6].field("Person.iconId"));
-            Assert.equals("/somepath/icon1.png", result.data[6].field("Person.Icon.path"));
-            Assert.equals("PASX Ltd", result.data[6].field("Person_Organization.Organization.name"));
-            */
+            // Assert.equals(4, result.data[6].field("Person.personId"));
+            // Assert.equals("Jim", result.data[6].field("Person.firstName"));
+            // Assert.equals("Parker", result.data[6].field("Person.lastName"));
+            // Assert.equals(1, result.data[6].field("Person.iconId"));
+            // Assert.equals("/somepath/icon1.png", result.data[6].field("Person.Icon.path"));
+            // Assert.equals("PASX Ltd", result.data[6].field("Person_Organization.Organization.name"));
+
             async.done();
         }, error -> {
             trace("error", error);
@@ -137,6 +137,146 @@ class TestBasicRelationships implements ITest {
         });
     }
 
+    function testBasicFind_Var(async:Async) {
+        var personId = 1;
+        db.table("Person").then(result -> {
+            return result.table.find(query($personId = personId));
+        }).then(result -> {
+            Assert.equals(2, result.data.length);
+
+            Assert.equals(1, result.data[0].field("Person.personId"));
+            Assert.equals("Ian", result.data[0].field("Person.firstName"));
+            Assert.equals("Harrigan", result.data[0].field("Person.lastName"));
+            Assert.equals(1, result.data[0].field("Person.iconId"));
+            Assert.equals("/somepath/icon1.png", result.data[0].field("Person.Icon.path"));
+            Assert.equals("ACME Inc", result.data[0].field("Person_Organization.Organization.name"));
+
+            Assert.equals(1, result.data[1].field("Person.personId"));
+            Assert.equals("Ian", result.data[1].field("Person.firstName"));
+            Assert.equals("Harrigan", result.data[1].field("Person.lastName"));
+            Assert.equals(1, result.data[1].field("Person.iconId"));
+            Assert.equals("/somepath/icon1.png", result.data[1].field("Person.Icon.path"));
+            Assert.equals("PASX Ltd", result.data[1].field("Person_Organization.Organization.name"));
+
+            async.done();
+        }, error -> {
+            trace("error", error);
+        });
+    }
+
+    function testBasicFind_VarString(async:Async) {
+        var firstName = "Ian";
+        db.table("Person").then(result -> {
+            return result.table.find(query($firstName = firstName));
+        }).then(result -> {
+            Assert.equals(2, result.data.length);
+
+            Assert.equals(1, result.data[0].field("Person.personId"));
+            Assert.equals("Ian", result.data[0].field("Person.firstName"));
+            Assert.equals("Harrigan", result.data[0].field("Person.lastName"));
+            Assert.equals(1, result.data[0].field("Person.iconId"));
+            Assert.equals("/somepath/icon1.png", result.data[0].field("Person.Icon.path"));
+            Assert.equals("ACME Inc", result.data[0].field("Person_Organization.Organization.name"));
+
+            Assert.equals(1, result.data[1].field("Person.personId"));
+            Assert.equals("Ian", result.data[1].field("Person.firstName"));
+            Assert.equals("Harrigan", result.data[1].field("Person.lastName"));
+            Assert.equals(1, result.data[1].field("Person.iconId"));
+            Assert.equals("/somepath/icon1.png", result.data[1].field("Person.Icon.path"));
+            Assert.equals("PASX Ltd", result.data[1].field("Person_Organization.Organization.name"));
+
+            async.done();
+        }, error -> {
+            trace("error", error);
+        });
+    }
+
+    function testBasicFindOr_VarString(async:Async) {
+        var personName1 = "Ian";
+        var personName2 = "Jim";
+        db.table("Person").then(result -> {
+            return result.table.find(query($firstName = personName1 || $firstName = personName2));
+        }).then(result -> {
+            Assert.equals(4, result.data.length);
+
+            Assert.equals(1, result.data[0].field("Person.personId"));
+            Assert.equals("Ian", result.data[0].field("Person.firstName"));
+            Assert.equals("Harrigan", result.data[0].field("Person.lastName"));
+            Assert.equals(1, result.data[0].field("Person.iconId"));
+            Assert.equals("/somepath/icon1.png", result.data[0].field("Person.Icon.path"));
+            Assert.equals("ACME Inc", result.data[0].field("Person_Organization.Organization.name"));
+
+            // TODO: the order at which things comes back changes from db to db, need to revise test
+            // Assert.equals(1, result.data[1].field("Person.personId"));
+            // Assert.equals("Ian", result.data[1].field("Person.firstName"));
+            // Assert.equals("Harrigan", result.data[1].field("Person.lastName"));
+            // Assert.equals(1, result.data[1].field("Person.iconId"));
+            // Assert.equals("/somepath/icon1.png", result.data[1].field("Person.Icon.path"));
+            // Assert.equals("PASX Ltd", result.data[1].field("Person_Organization.Organization.name"));
+
+            // Assert.equals(4, result.data[2].field("Person.personId"));
+            // Assert.equals("Jim", result.data[2].field("Person.firstName"));
+            // Assert.equals("Parker", result.data[2].field("Person.lastName"));
+            // Assert.equals(1, result.data[2].field("Person.iconId"));
+            // Assert.equals("/somepath/icon1.png", result.data[2].field("Person.Icon.path"));
+            // Assert.equals("Haxe LLC", result.data[2].field("Person_Organization.Organization.name"));
+
+            // Assert.equals(4, result.data[3].field("Person.personId"));
+            // Assert.equals("Jim", result.data[3].field("Person.firstName"));
+            // Assert.equals("Parker", result.data[3].field("Person.lastName"));
+            // Assert.equals(1, result.data[3].field("Person.iconId"));
+            // Assert.equals("/somepath/icon1.png", result.data[3].field("Person.Icon.path"));
+            // Assert.equals("PASX Ltd", result.data[3].field("Person_Organization.Organization.name"));
+
+            async.done();
+        }, error -> {
+            trace("error", error);
+        });
+    }
+
+    function testBasicFindOr_Var(async:Async) {
+        var personId1 = 1;
+        var personId2 = 4;
+        db.table("Person").then(result -> {
+            return result.table.find(query($personId = personId1 || $personId = personId2));
+        }).then(result -> {
+            Assert.equals(4, result.data.length);
+
+            Assert.equals(1, result.data[0].field("Person.personId"));
+            Assert.equals("Ian", result.data[0].field("Person.firstName"));
+            Assert.equals("Harrigan", result.data[0].field("Person.lastName"));
+            Assert.equals(1, result.data[0].field("Person.iconId"));
+            Assert.equals("/somepath/icon1.png", result.data[0].field("Person.Icon.path"));
+            Assert.equals("ACME Inc", result.data[0].field("Person_Organization.Organization.name"));
+
+            // TODO: the order at which things comes back changes from db to db, need to revise test
+            // Assert.equals(1, result.data[1].field("Person.personId"));
+            // Assert.equals("Ian", result.data[1].field("Person.firstName"));
+            // Assert.equals("Harrigan", result.data[1].field("Person.lastName"));
+            // Assert.equals(1, result.data[1].field("Person.iconId"));
+            // Assert.equals("/somepath/icon1.png", result.data[1].field("Person.Icon.path"));
+            // Assert.equals("PASX Ltd", result.data[1].field("Person_Organization.Organization.name"));
+
+            // Assert.equals(4, result.data[2].field("Person.personId"));
+            // Assert.equals("Jim", result.data[2].field("Person.firstName"));
+            // Assert.equals("Parker", result.data[2].field("Person.lastName"));
+            // Assert.equals(1, result.data[2].field("Person.iconId"));
+            // Assert.equals("/somepath/icon1.png", result.data[2].field("Person.Icon.path"));
+            // Assert.equals("Haxe LLC", result.data[2].field("Person_Organization.Organization.name"));
+
+            // Assert.equals(4, result.data[3].field("Person.personId"));
+            // Assert.equals("Jim", result.data[3].field("Person.firstName"));
+            // Assert.equals("Parker", result.data[3].field("Person.lastName"));
+            // Assert.equals(1, result.data[3].field("Person.iconId"));
+            // Assert.equals("/somepath/icon1.png", result.data[3].field("Person.Icon.path"));
+            // Assert.equals("PASX Ltd", result.data[3].field("Person_Organization.Organization.name"));
+
+            async.done();
+        }, error -> {
+            trace("error", error);
+        });
+    }
+
     function testBasicFindOr(async:Async) {
         db.table("Person").then(result -> {
             return result.table.find(query($personId = 1 || $personId = 4));
@@ -150,28 +290,27 @@ class TestBasicRelationships implements ITest {
             Assert.equals("/somepath/icon1.png", result.data[0].field("Person.Icon.path"));
             Assert.equals("ACME Inc", result.data[0].field("Person_Organization.Organization.name"));
 
-            /* TODO: the order at which things comes back changes from db to db, need to revise test
-            Assert.equals(1, result.data[1].field("Person.personId"));
-            Assert.equals("Ian", result.data[1].field("Person.firstName"));
-            Assert.equals("Harrigan", result.data[1].field("Person.lastName"));
-            Assert.equals(1, result.data[1].field("Person.iconId"));
-            Assert.equals("/somepath/icon1.png", result.data[1].field("Person.Icon.path"));
-            Assert.equals("PASX Ltd", result.data[1].field("Person_Organization.Organization.name"));
+            // TODO: the order at which things comes back changes from db to db, need to revise test
+            // Assert.equals(1, result.data[1].field("Person.personId"));
+            // Assert.equals("Ian", result.data[1].field("Person.firstName"));
+            // Assert.equals("Harrigan", result.data[1].field("Person.lastName"));
+            // Assert.equals(1, result.data[1].field("Person.iconId"));
+            // Assert.equals("/somepath/icon1.png", result.data[1].field("Person.Icon.path"));
+            // Assert.equals("PASX Ltd", result.data[1].field("Person_Organization.Organization.name"));
 
-            Assert.equals(4, result.data[2].field("Person.personId"));
-            Assert.equals("Jim", result.data[2].field("Person.firstName"));
-            Assert.equals("Parker", result.data[2].field("Person.lastName"));
-            Assert.equals(1, result.data[2].field("Person.iconId"));
-            Assert.equals("/somepath/icon1.png", result.data[2].field("Person.Icon.path"));
-            Assert.equals("Haxe LLC", result.data[2].field("Person_Organization.Organization.name"));
+            // Assert.equals(4, result.data[2].field("Person.personId"));
+            // Assert.equals("Jim", result.data[2].field("Person.firstName"));
+            // Assert.equals("Parker", result.data[2].field("Person.lastName"));
+            // Assert.equals(1, result.data[2].field("Person.iconId"));
+            // Assert.equals("/somepath/icon1.png", result.data[2].field("Person.Icon.path"));
+            // Assert.equals("Haxe LLC", result.data[2].field("Person_Organization.Organization.name"));
 
-            Assert.equals(4, result.data[3].field("Person.personId"));
-            Assert.equals("Jim", result.data[3].field("Person.firstName"));
-            Assert.equals("Parker", result.data[3].field("Person.lastName"));
-            Assert.equals(1, result.data[3].field("Person.iconId"));
-            Assert.equals("/somepath/icon1.png", result.data[3].field("Person.Icon.path"));
-            Assert.equals("PASX Ltd", result.data[3].field("Person_Organization.Organization.name"));
-            */
+            // Assert.equals(4, result.data[3].field("Person.personId"));
+            // Assert.equals("Jim", result.data[3].field("Person.firstName"));
+            // Assert.equals("Parker", result.data[3].field("Person.lastName"));
+            // Assert.equals(1, result.data[3].field("Person.iconId"));
+            // Assert.equals("/somepath/icon1.png", result.data[3].field("Person.Icon.path"));
+            // Assert.equals("PASX Ltd", result.data[3].field("Person_Organization.Organization.name"));
 
             async.done();
         }, error -> {
