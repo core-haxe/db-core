@@ -7,6 +7,7 @@ import haxe.macro.ExprTools;
 using StringTools;
 
 enum QBinop {
+    QOpEq;
     QOpAssign;
     QOpBoolAnd;
     QOpBoolOr;
@@ -87,6 +88,7 @@ class Query {
         return switch (e.expr) {
             case EBinop(op, e1, e2):
                 var qbinop = switch (op) {
+                    case OpEq:          QBinop.QOpEq;
                     case OpAssign:      QBinop.QOpAssign;
                     case OpBoolAnd:     QBinop.QOpBoolAnd;
                     case OpBoolOr:      QBinop.QOpBoolOr;
@@ -173,9 +175,10 @@ class Query {
     private static function queryExprPartToSql(qe:QueryExpr, sb:StringBuf, values:Array<Any>, fieldPrefix:String, isColumn:Bool) {
         switch (qe) {
             case QueryBinop(op, e1, e2):
-                var isColumn2 = (op == QOpAssign) || (op == QOpNotEq) || (op == QOpGt) || (op == QOpLt) || (op == QOpGte) || (op == QOpLte) || (op == QOpIn);
+                var isColumn2 = (op == QOpEq) || (op == QOpAssign) || (op == QOpNotEq) || (op == QOpGt) || (op == QOpLt) || (op == QOpGte) || (op == QOpLte) || (op == QOpIn);
                 queryExprPartToSql(e1, sb, values, fieldPrefix, isColumn2);
                 switch (op) {
+                    case QOpEq:                 sb.add(" = ");
                     case QOpAssign:             sb.add(" = ");
                     case QOpBoolAnd:            sb.add(" AND ");
                     case QOpBoolOr:             sb.add(" OR ");

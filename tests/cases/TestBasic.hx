@@ -47,6 +47,20 @@ class TestBasic implements ITest {
         });
     }
 
+    function testBasicFindOne_Eq(async:Async) {
+        db.table("Person").then(result -> {
+            return result.table.findOne(query($personId == 1));
+        }).then(result -> {
+            Assert.equals(1, result.data.field("personId"));
+            Assert.equals("Ian", result.data.field("firstName"));
+            Assert.equals("Harrigan", result.data.field("lastName"));
+            Assert.equals(1, result.data.field("iconId"));
+            async.done();
+        }, error -> {
+            trace("error", error);
+        });
+    }
+
     function testBasicFindOne_Alt(async:Async) {
         db.table("Person").then(result -> {
             return result.table.findOne(query($personId = 2));
