@@ -1,6 +1,5 @@
 package cases;
 
-import haxe.Resource;
 import haxe.io.Path;
 import haxe.io.Bytes;
 import db.TableSchema;
@@ -44,7 +43,7 @@ class TestImport implements ITest {
     }
 
     function testImport_Json_All_String(async:Async) {
-        var jsonString = Resource.getString("resources/export/Persons.json");
+        var jsonString = File.getContent(Path.normalize(Sys.getCwd() + "resources/export/Persons.json"));
         Assert.notNull(jsonString);
         Assert.isTrue(jsonString.length > 0);
 

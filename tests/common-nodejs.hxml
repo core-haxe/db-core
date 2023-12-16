@@ -8,5 +8,3 @@
 -lib hxnodejs
 
 -D no-deprecation-warnings
-
---resource resources/export/Persons.json@resources/export/Persons.json
