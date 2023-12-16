@@ -1,4 +1,4 @@
-package db.export;
+package db.exporter;
 
 import Query.QueryExpr;
 

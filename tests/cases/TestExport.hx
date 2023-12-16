@@ -1,13 +1,12 @@
 package cases;
 
 import haxe.Json;
-import Query.*;
 import db.IDatabase;
 import utest.Assert;
 import cases.util.DBCreator;
 import utest.Async;
 import utest.ITest;
-import db.export.JsonDatabaseExporter;
+import db.exporter.JsonDatabaseExporter;
 
 class TestExport implements ITest {
     private var db:IDatabase;
@@ -37,7 +36,7 @@ class TestExport implements ITest {
     
     function testExport_Json_All_String(async:Async) {
         var exporter = new JsonDatabaseExporter();
-        exporter.export(db).then(stringResult -> {
+        exporter.exportToString(db).then(stringResult -> {
             Assert.notNull(stringResult);
             var json = Json.parse(stringResult);
             Assert.notNull(json.tables);
@@ -110,6 +109,7 @@ class TestExport implements ITest {
 
             async.done();
         }, error -> {
+            Assert.fail(error);
             trace(error);
             async.done();
         });

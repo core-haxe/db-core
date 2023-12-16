@@ -1,4 +1,4 @@
-package db.export;
+package db.exporter;
 
 @:structInit
 class DatabaseExportOptions {

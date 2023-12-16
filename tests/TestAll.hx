@@ -35,6 +35,7 @@ class TestAll {
         #if !neko
         runner.addCase(new TestBinary(db));
         runner.addCase(new TestExport(db));
+        runner.addCase(new TestImport(db));
         #end
 
         #if nodejs // for another day

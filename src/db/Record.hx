@@ -55,6 +55,17 @@ class Record {
         data.remove(name);
     }
 
+    public function debugString():String {
+        var sb = new StringBuf();
+        for (f in data.keys()) {
+            sb.add(f);
+            sb.add("=");
+            sb.add(data.get(f));
+            sb.add("; ");
+        }
+        return sb.toString();
+    }
+
     public static function fromDynamic(data:Dynamic):Record {
         var r = new Record();
         for (f in Reflect.fields(data)) {

@@ -11,7 +11,7 @@ import sys.FileSystem;
 import promises.Promise;
 
 class DBCreator {
-    public static function create(db:IDatabase, defineRelationships:Bool = false, createDummyData:Bool = true):Promise<Bool> {
+    public static function create(db:IDatabase, defineRelationships:Bool = false, createDummyData:Bool = true, createTables:Bool = true):Promise<Bool> {
         return new Promise((resolve, reject) -> {
             if ((db is SqliteDatabase)) {
                 File.saveContent("persons.db", "");
@@ -27,29 +27,41 @@ class DBCreator {
                 }
                 return db.create();
             }).then(_ -> {
-                return db.createTable("Person", [
-                    {name: "personId", type: Number, options: [ColumnOptions.PrimaryKey, ColumnOptions.AutoIncrement]},
-                    {name: "lastName", type: Text(50)},
-                    {name: "firstName", type: Text(50)},
-                    {name: "iconId", type: Number},
-                    {name: "contractDocument", type: Binary}
-                ]);
+                if (createTables) {
+                    return db.createTable("Person", [
+                        {name: "personId", type: Number, options: [ColumnOptions.PrimaryKey, ColumnOptions.AutoIncrement]},
+                        {name: "lastName", type: Text(50)},
+                        {name: "firstName", type: Text(50)},
+                        {name: "iconId", type: Number},
+                        {name: "contractDocument", type: Binary}
+                    ]);
+                }
+                return null;
             }).then(_ -> {
-                return db.createTable("Icon", [
-                    {name: "iconId", type: Number},
-                    {name: "path", type: Text(50)}
-                ]);
+                if (createTables) {
+                    return db.createTable("Icon", [
+                        {name: "iconId", type: Number},
+                        {name: "path", type: Text(50)}
+                    ]);
+                }
+                return null;
             }).then(_ -> {
-                return db.createTable("Organization", [
-                    {name: "organizationId", type: Number},
-                    {name: "name", type: Text(50)},
-                    {name: "iconId", type: Number}
-                ]);
+                if (createTables) {
+                    return db.createTable("Organization", [
+                        {name: "organizationId", type: Number},
+                        {name: "name", type: Text(50)},
+                        {name: "iconId", type: Number}
+                    ]);
+                }
+                return null;
             }).then(_ -> {
-                return db.createTable("Person_Organization", [
-                    {name: "Person_personId", type: Number},
-                    {name: "Organization_organizationId", type: Number}
-                ]);
+                if (createTables) {
+                    return db.createTable("Person_Organization", [
+                        {name: "Person_personId", type: Number},
+                        {name: "Organization_organizationId", type: Number}
+                    ]);
+                } 
+                return null;
             }).then(_ -> {
                 if (defineRelationships) {
                     db.defineTableRelationship("Person.iconId", "Icon.iconId");

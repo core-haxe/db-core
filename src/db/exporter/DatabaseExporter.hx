@@ -1,4 +1,4 @@
-package db.export;
+package db.exporter;
 
 import promises.PromiseUtils;
 import promises.Promise;
@@ -7,7 +7,7 @@ class DatabaseExporter implements IDatabaseExporter {
     public function new() {
     }
 
-    public function export(db:IDatabase, options:DatabaseExportOptions = null):Promise<String> {
+    public function exportToString(db:IDatabase, options:DatabaseExportOptions = null):Promise<String> {
         return new Promise((resolve, reject) -> {
             var finalSchema:DatabaseSchema = null;
             db.schema().then(result -> {
