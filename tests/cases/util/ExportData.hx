@@ -99,6 +99,11 @@ class ExportData {
                         "name": "contractDocument",
                         "type": "Binary",
                         "options": []
+                    },
+                    {
+                        "name": "hourlyRate",
+                        "type": "Decimal",
+                        "options": []
                     }
                 ],
                 "data": [
@@ -107,28 +112,32 @@ class ExportData {
                         "Harrigan",
                         "Ian",
                         1,
-                        "dGhpcyBpcyBpYW5zIGNvbnRyYWN0IGRvY3VtZW50"
+                        "dGhpcyBpcyBpYW5zIGNvbnRyYWN0IGRvY3VtZW50",
+                        111.222
                     ],
                     [
                         2,
                         "Barker",
                         "Bob",
                         3,
-                        null
+                        null,
+                        333.444
                     ],
                     [
                         3,
                         "Mallot",
                         "Tim",
                         2,
-                        null
+                        null,
+                        555.666
                     ],
                     [
                         4,
                         "Parker",
                         "Jim",
                         1,
-                        null
+                        null,
+                        777.888
                     ]
                 ]
             },

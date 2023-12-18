@@ -41,6 +41,7 @@ class TestBasic implements ITest {
             Assert.equals("Ian", result.data.field("firstName"));
             Assert.equals("Harrigan", result.data.field("lastName"));
             Assert.equals(1, result.data.field("iconId"));
+            Assert.equals(111.222, result.data.field("hourlyRate"));
             async.done();
         }, error -> {
             trace("error", error);
@@ -55,6 +56,7 @@ class TestBasic implements ITest {
             Assert.equals("Ian", result.data.field("firstName"));
             Assert.equals("Harrigan", result.data.field("lastName"));
             Assert.equals(1, result.data.field("iconId"));
+            Assert.equals(111.222, result.data.field("hourlyRate"));
             async.done();
         }, error -> {
             trace("error", error);
@@ -69,6 +71,7 @@ class TestBasic implements ITest {
             Assert.equals("Bob", result.data.field("firstName"));
             Assert.equals("Barker", result.data.field("lastName"));
             Assert.equals(3, result.data.field("iconId"));
+            Assert.equals(333.444, result.data.field("hourlyRate"));
             async.done();
         }, error -> {
             trace("error", error);
@@ -85,11 +88,13 @@ class TestBasic implements ITest {
             Assert.equals("Ian", result.data[0].field("firstName"));
             Assert.equals("Harrigan", result.data[0].field("lastName"));
             Assert.equals(1, result.data[0].field("iconId"));
+            Assert.equals(111.222, result.data[0].field("hourlyRate"));
 
             Assert.equals(3, result.data[2].field("personId"));
             Assert.equals("Tim", result.data[2].field("firstName"));
             Assert.equals("Mallot", result.data[2].field("lastName"));
             Assert.equals(2, result.data[2].field("iconId"));
+            Assert.equals(555.666, result.data[2].field("hourlyRate"));
 
             async.done();
         }, error -> {
@@ -107,6 +112,7 @@ class TestBasic implements ITest {
             Assert.equals("Ian", result.data[0].field("firstName"));
             Assert.equals("Harrigan", result.data[0].field("lastName"));
             Assert.equals(1, result.data[0].field("iconId"));
+            Assert.equals(111.222, result.data[0].field("hourlyRate"));
             async.done();
         }, error -> {
             trace("error", error);
@@ -123,11 +129,13 @@ class TestBasic implements ITest {
             Assert.equals("Ian", result.data[0].field("firstName"));
             Assert.equals("Harrigan", result.data[0].field("lastName"));
             Assert.equals(1, result.data[0].field("iconId"));
+            Assert.equals(111.222, result.data[0].field("hourlyRate"));
 
             Assert.equals(4, result.data[1].field("personId"));
             Assert.equals("Jim", result.data[1].field("firstName"));
             Assert.equals("Parker", result.data[1].field("lastName"));
             Assert.equals(1, result.data[1].field("iconId"));
+            Assert.equals(777.888, result.data[1].field("hourlyRate"));
 
             async.done();
         }, error -> {
@@ -145,6 +153,7 @@ class TestBasic implements ITest {
             Assert.equals("Ian", result.data[0].field("firstName"));
             Assert.equals("Harrigan", result.data[0].field("lastName"));
             Assert.equals(1, result.data[0].field("iconId"));
+            Assert.equals(111.222, result.data[0].field("hourlyRate"));
 
             async.done();
         }, error -> {

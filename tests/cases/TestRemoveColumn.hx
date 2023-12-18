@@ -45,12 +45,13 @@ class TestRemoveColumn implements ITest {
 
             var personTable = schema.findTable("Person");
             Assert.notNull(personTable);
-            Assert.equals(5, personTable.columns.length);
+            Assert.equals(6, personTable.columns.length);
             Assert.equals("personId", personTable.findColumn("personId").name);
             Assert.equals("lastName", personTable.findColumn("lastName").name);
             Assert.equals("firstName", personTable.findColumn("firstName").name);
             Assert.equals("iconId", personTable.findColumn("iconId").name);
             Assert.equals("contractDocument", personTable.findColumn("contractDocument").name);
+            Assert.equals("hourlyRate", personTable.findColumn("hourlyRate").name);
 
             var iconTable = schema.findTable("Icon");
             Assert.notNull(iconTable);
@@ -89,11 +90,12 @@ class TestRemoveColumn implements ITest {
 
             var personTable = schema.findTable("Person");
             Assert.notNull(personTable);
-            Assert.equals(4, personTable.columns.length);
+            Assert.equals(5, personTable.columns.length);
             Assert.equals("personId", personTable.findColumn("personId").name);
             Assert.equals("lastName", personTable.findColumn("lastName").name);
             Assert.equals("firstName", personTable.findColumn("firstName").name);
             Assert.equals("iconId", personTable.findColumn("iconId").name);
+            Assert.equals("hourlyRate", personTable.findColumn("hourlyRate").name);
 
             async.done();
         }, error -> {

@@ -83,12 +83,13 @@ class TestExport implements ITest {
                 { name: "firstName", type: "Text(50)", options: [] },
                 { name: "iconId", type: "Number", options: [] },
                 { name: "contractDocument", type: "Binary", options: [] },
+                { name: "hourlyRate", type: "Decimal", options: [] },
             ]);
             assertJsonData(jsonTable.data, [
-                [1, "Harrigan", "Ian", 1, "dGhpcyBpcyBpYW5zIGNvbnRyYWN0IGRvY3VtZW50"],
-                [2, "Barker", "Bob", 3, null],
-                [3, "Mallot", "Tim", 2, null],
-                [4, "Parker", "Jim", 1, null]
+                [1, "Harrigan", "Ian", 1, "dGhpcyBpcyBpYW5zIGNvbnRyYWN0IGRvY3VtZW50", 111.222],
+                [2, "Barker", "Bob", 3, null, 333.444],
+                [3, "Mallot", "Tim", 2, null, 555.666],
+                [4, "Parker", "Jim", 1, null, 777.888]
             ]);
 
             // Person_Organization table

@@ -42,6 +42,7 @@ class TestQuery implements ITest {
             Assert.equals("Ian", result.data[0].field("firstName"));
             Assert.equals("Harrigan", result.data[0].field("lastName"));
             Assert.equals(1, result.data[0].field("iconId"));
+            Assert.equals(111.222, result.data[0].field("hourlyRate"));
             async.done();
         }, error -> {
             trace("error", error);
@@ -135,6 +136,7 @@ class TestQuery implements ITest {
             Assert.equals("Ian", result.data[0].field("firstName"));
             Assert.equals("Harrigan", result.data[0].field("lastName"));
             Assert.equals(1, result.data[0].field("iconId"));
+            Assert.equals(111.222, result.data[0].field("hourlyRate"));            
             async.done();
         }, error -> {
             trace("error", error);
@@ -151,6 +153,7 @@ class TestQuery implements ITest {
             Assert.equals("Ian", result.data[0].field("firstName"));
             Assert.equals("Harrigan", result.data[0].field("lastName"));
             Assert.equals(1, result.data[0].field("iconId"));
+            Assert.equals(111.222, result.data[0].field("hourlyRate"));            
             async.done();
         }, error -> {
             trace("error", error);
@@ -206,6 +209,7 @@ class TestQuery implements ITest {
             Assert.equals("Ian", result.data[0].field("firstName"));
             Assert.equals("Harrigan", result.data[0].field("lastName"));
             Assert.equals(1, result.data[0].field("iconId"));
+            Assert.equals(111.222, result.data[0].field("hourlyRate"));            
             async.done();
         }, error -> {
             trace("error", error);
@@ -222,6 +226,7 @@ class TestQuery implements ITest {
             Assert.equals("Ian", result.data[0].field("firstName"));
             Assert.equals("Harrigan", result.data[0].field("lastName"));
             Assert.equals(1, result.data[0].field("iconId"));
+            Assert.equals(111.222, result.data[0].field("hourlyRate"));            
             async.done();
         }, error -> {
             trace("error", error);
@@ -238,6 +243,7 @@ class TestQuery implements ITest {
             Assert.equals("Ian", result.data[0].field("firstName"));
             Assert.equals("Harrigan", result.data[0].field("lastName"));
             Assert.equals(1, result.data[0].field("iconId"));
+            Assert.equals(111.222, result.data[0].field("hourlyRate"));            
             async.done();
         }, error -> {
             trace("error", error);
@@ -264,6 +270,7 @@ class TestQuery implements ITest {
             Assert.equals("Ian", result.data[0].field("firstName"));
             Assert.equals("Harrigan", result.data[0].field("lastName"));
             Assert.equals(1, result.data[0].field("iconId"));
+            Assert.equals(111.222, result.data[0].field("hourlyRate"));            
             async.done();
         }, error -> {
             trace("error", error);
@@ -280,11 +287,13 @@ class TestQuery implements ITest {
             Assert.equals("Ian", result.data[0].field("firstName"));
             Assert.equals("Harrigan", result.data[0].field("lastName"));
             Assert.equals(1, result.data[0].field("iconId"));
+            Assert.equals(111.222, result.data[0].field("hourlyRate"));            
 
             Assert.equals(2, result.data[1].field("personId"));
             Assert.equals("Bob", result.data[1].field("firstName"));
             Assert.equals("Barker", result.data[1].field("lastName"));
             Assert.equals(3, result.data[1].field("iconId"));
+            Assert.equals(333.444, result.data[1].field("hourlyRate"));            
             
             async.done();
         }, error -> {
@@ -301,6 +310,7 @@ class TestQuery implements ITest {
             Assert.equals("Ian", result.data[0].field("firstName"));
             Assert.equals("Harrigan", result.data[0].field("lastName"));
             Assert.equals(1, result.data[0].field("iconId"));
+            Assert.equals(111.222, result.data[0].field("hourlyRate"));            
             
             async.done();
         }, error -> {

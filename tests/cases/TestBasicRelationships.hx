@@ -45,6 +45,7 @@ class TestBasicRelationships implements ITest {
                 "Person.firstName" => "Ian",
                 "Person.lastName" => "Harrigan",
                 "Person.iconId" => 1,
+                "Person.hourlyRate" => 111.222,
                 "Person.Icon.path" => "/somepath/icon1.png",
                 "Person_Organization.Organization.name" => "ACME Inc",
             ], result.data);
@@ -54,6 +55,7 @@ class TestBasicRelationships implements ITest {
                 "Person.firstName" => "Ian",
                 "Person.lastName" => "Harrigan",
                 "Person.iconId" => 1,
+                "Person.hourlyRate" => 111.222,
                 "Person.Icon.path" => "/somepath/icon1.png",
                 "Person_Organization.Organization.name" => "PASX Ltd",
             ], result.data);
@@ -63,6 +65,7 @@ class TestBasicRelationships implements ITest {
                 "Person.firstName" => "Bob",
                 "Person.lastName" => "Barker",
                 "Person.iconId" => 3,
+                "Person.hourlyRate" => 333.444,
                 "Person.Icon.path" => "/somepath/icon3.png",
                 "Person_Organization.Organization.name" => "ACME Inc",
             ], result.data);
@@ -72,6 +75,7 @@ class TestBasicRelationships implements ITest {
                 "Person.firstName" => "Bob",
                 "Person.lastName" => "Barker",
                 "Person.iconId" => 3,
+                "Person.hourlyRate" => 333.444,
                 "Person.Icon.path" => "/somepath/icon3.png",
                 "Person_Organization.Organization.name" => "Haxe LLC",
             ], result.data);
@@ -81,6 +85,7 @@ class TestBasicRelationships implements ITest {
                 "Person.firstName" => "Tim",
                 "Person.lastName" => "Mallot",
                 "Person.iconId" => 2,
+                "Person.hourlyRate" => 555.666,
                 "Person.Icon.path" => "/somepath/icon2.png",
                 "Person_Organization.Organization.name" => "ACME Inc",
             ], result.data);
@@ -90,6 +95,7 @@ class TestBasicRelationships implements ITest {
                 "Person.firstName" => "Jim",
                 "Person.lastName" => "Parker",
                 "Person.iconId" => 1,
+                "Person.hourlyRate" => 777.888,
                 "Person.Icon.path" => "/somepath/icon1.png",
                 "Person_Organization.Organization.name" => "Haxe LLC",
             ], result.data);
@@ -99,6 +105,7 @@ class TestBasicRelationships implements ITest {
                 "Person.firstName" => "Jim",
                 "Person.lastName" => "Parker",
                 "Person.iconId" => 1,
+                "Person.hourlyRate" => 777.888,
                 "Person.Icon.path" => "/somepath/icon1.png",
                 "Person_Organization.Organization.name" => "PASX Ltd",
             ], result.data);
@@ -120,6 +127,7 @@ class TestBasicRelationships implements ITest {
                 "Person.firstName" => "Ian",
                 "Person.lastName" => "Harrigan",
                 "Person.iconId" => 1,
+                "Person.hourlyRate" => 111.222,
                 "Person.Icon.path" => "/somepath/icon1.png",
                 "Person_Organization.Organization.name" => "ACME Inc",
             ], result.data);
@@ -129,6 +137,7 @@ class TestBasicRelationships implements ITest {
                 "Person.firstName" => "Ian",
                 "Person.lastName" => "Harrigan",
                 "Person.iconId" => 1,
+                "Person.hourlyRate" => 111.222,
                 "Person.Icon.path" => "/somepath/icon1.png",
                 "Person_Organization.Organization.name" => "PASX Ltd",
             ], result.data);
@@ -151,6 +160,7 @@ class TestBasicRelationships implements ITest {
                 "Person.firstName" => "Ian",
                 "Person.lastName" => "Harrigan",
                 "Person.iconId" => 1,
+                "Person.hourlyRate" => 111.222,
                 "Person.Icon.path" => "/somepath/icon1.png",
                 "Person_Organization.Organization.name" => "ACME Inc",
             ], result.data);
@@ -160,6 +170,7 @@ class TestBasicRelationships implements ITest {
                 "Person.firstName" => "Ian",
                 "Person.lastName" => "Harrigan",
                 "Person.iconId" => 1,
+                "Person.hourlyRate" => 111.222,
                 "Person.Icon.path" => "/somepath/icon1.png",
                 "Person_Organization.Organization.name" => "PASX Ltd",
             ], result.data);
@@ -182,6 +193,7 @@ class TestBasicRelationships implements ITest {
                 "Person.firstName" => "Ian",
                 "Person.lastName" => "Harrigan",
                 "Person.iconId" => 1,
+                "Person.hourlyRate" => 111.222,
                 "Person.Icon.path" => "/somepath/icon1.png",
                 "Person_Organization.Organization.name" => "ACME Inc",
             ], result.data);
@@ -191,6 +203,7 @@ class TestBasicRelationships implements ITest {
                 "Person.firstName" => "Ian",
                 "Person.lastName" => "Harrigan",
                 "Person.iconId" => 1,
+                "Person.hourlyRate" => 111.222,
                 "Person.Icon.path" => "/somepath/icon1.png",
                 "Person_Organization.Organization.name" => "PASX Ltd",
             ], result.data);
@@ -214,6 +227,7 @@ class TestBasicRelationships implements ITest {
                 "Person.firstName" => "Ian",
                 "Person.lastName" => "Harrigan",
                 "Person.iconId" => 1,
+                "Person.hourlyRate" => 111.222,
                 "Person.Icon.path" => "/somepath/icon1.png",
                 "Person_Organization.Organization.name" => "ACME Inc",
             ], result.data);
@@ -223,6 +237,7 @@ class TestBasicRelationships implements ITest {
                 "Person.firstName" => "Ian",
                 "Person.lastName" => "Harrigan",
                 "Person.iconId" => 1,
+                "Person.hourlyRate" => 111.222,
                 "Person.Icon.path" => "/somepath/icon1.png",
                 "Person_Organization.Organization.name" => "PASX Ltd",
             ], result.data);
@@ -232,6 +247,7 @@ class TestBasicRelationships implements ITest {
                 "Person.firstName" => "Jim",
                 "Person.lastName" => "Parker",
                 "Person.iconId" => 1,
+                "Person.hourlyRate" => 777.888,
                 "Person.Icon.path" => "/somepath/icon1.png",
                 "Person_Organization.Organization.name" => "Haxe LLC",
             ], result.data);
@@ -241,6 +257,7 @@ class TestBasicRelationships implements ITest {
                 "Person.firstName" => "Jim",
                 "Person.lastName" => "Parker",
                 "Person.iconId" => 1,
+                "Person.hourlyRate" => 777.888,
                 "Person.Icon.path" => "/somepath/icon1.png",
                 "Person_Organization.Organization.name" => "PASX Ltd",
             ], result.data);
@@ -264,6 +281,7 @@ class TestBasicRelationships implements ITest {
                 "Person.firstName" => "Ian",
                 "Person.lastName" => "Harrigan",
                 "Person.iconId" => 1,
+                "Person.hourlyRate" => 111.222,
                 "Person.Icon.path" => "/somepath/icon1.png",
                 "Person_Organization.Organization.name" => "ACME Inc",
             ], result.data);
@@ -273,6 +291,7 @@ class TestBasicRelationships implements ITest {
                 "Person.firstName" => "Ian",
                 "Person.lastName" => "Harrigan",
                 "Person.iconId" => 1,
+                "Person.hourlyRate" => 111.222,
                 "Person.Icon.path" => "/somepath/icon1.png",
                 "Person_Organization.Organization.name" => "PASX Ltd",
             ], result.data);
@@ -282,6 +301,7 @@ class TestBasicRelationships implements ITest {
                 "Person.firstName" => "Jim",
                 "Person.lastName" => "Parker",
                 "Person.iconId" => 1,
+                "Person.hourlyRate" => 777.888,
                 "Person.Icon.path" => "/somepath/icon1.png",
                 "Person_Organization.Organization.name" => "Haxe LLC",
             ], result.data);
@@ -291,6 +311,7 @@ class TestBasicRelationships implements ITest {
                 "Person.firstName" => "Jim",
                 "Person.lastName" => "Parker",
                 "Person.iconId" => 1,
+                "Person.hourlyRate" => 777.888,
                 "Person.Icon.path" => "/somepath/icon1.png",
                 "Person_Organization.Organization.name" => "PASX Ltd",
             ], result.data);
@@ -312,6 +333,7 @@ class TestBasicRelationships implements ITest {
                 "Person.firstName" => "Ian",
                 "Person.lastName" => "Harrigan",
                 "Person.iconId" => 1,
+                "Person.hourlyRate" => 111.222,
                 "Person.Icon.path" => "/somepath/icon1.png",
                 "Person_Organization.Organization.name" => "ACME Inc",
             ], result.data);
@@ -321,6 +343,7 @@ class TestBasicRelationships implements ITest {
                 "Person.firstName" => "Ian",
                 "Person.lastName" => "Harrigan",
                 "Person.iconId" => 1,
+                "Person.hourlyRate" => 111.222,
                 "Person.Icon.path" => "/somepath/icon1.png",
                 "Person_Organization.Organization.name" => "PASX Ltd",
             ], result.data);
@@ -330,6 +353,7 @@ class TestBasicRelationships implements ITest {
                 "Person.firstName" => "Jim",
                 "Person.lastName" => "Parker",
                 "Person.iconId" => 1,
+                "Person.hourlyRate" => 777.888,
                 "Person.Icon.path" => "/somepath/icon1.png",
                 "Person_Organization.Organization.name" => "Haxe LLC",
             ], result.data);
@@ -339,6 +363,7 @@ class TestBasicRelationships implements ITest {
                 "Person.firstName" => "Jim",
                 "Person.lastName" => "Parker",
                 "Person.iconId" => 1,
+                "Person.hourlyRate" => 777.888,
                 "Person.Icon.path" => "/somepath/icon1.png",
                 "Person_Organization.Organization.name" => "PASX Ltd",
             ], result.data);

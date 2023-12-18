@@ -39,12 +39,14 @@ class TestAdd implements ITest {
             record.field("lastName", "new last name");
             record.field("firstName", "new first name");
             record.field("iconId", 1);
+            record.field("hourlyRate", 999.777);
             return result.table.add(record);
         }).then(result -> {
             Assert.equals(5, result.data.field("_insertedId"));
             Assert.equals("new first name", result.data.field("firstName"));
             Assert.equals("new last name", result.data.field("lastName"));
             Assert.equals(1, result.data.field("iconId"));
+            Assert.equals(999.777, result.data.field("hourlyRate"));
             async.done();
         }, error -> {
             trace("error", error);

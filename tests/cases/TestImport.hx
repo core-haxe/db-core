@@ -65,6 +65,7 @@ class TestImport implements ITest {
                 {name: "firstName", type: ColumnType.Text(50), options: []},
                 {name: "iconId", type: ColumnType.Number, options: []},
                 {name: "contractDocument", type: ColumnType.Binary, options: []},
+                {name: "hourlyRate", type: ColumnType.Decimal, options: []},
             ]);
             assertTableSchema(schema.findTable("Person_Organization"), "Person_Organization", [
                 {name: "Person_personId", type: ColumnType.Number, options: []},
@@ -99,10 +100,10 @@ class TestImport implements ITest {
             return result.table.all();
         }).then(result -> {
             Assert.equals(4, result.data.length);
-            assertRecordExists(["personId" => 1, "firstName" => "Ian", "lastName" => "Harrigan", "iconId" => 1, "contractDocument" => Bytes.ofString("this is ians contract document")], result.data);
-            assertRecordExists(["personId" => 2, "firstName" => "Bob", "lastName" => "Barker", "iconId" => 3, "contractDocument" => null], result.data);
-            assertRecordExists(["personId" => 3, "firstName" => "Tim", "lastName" => "Mallot", "iconId" => 2, "contractDocument" => null], result.data);
-            assertRecordExists(["personId" => 4, "firstName" => "Jim", "lastName" => "Parker", "iconId" => 1, "contractDocument" => null], result.data);
+            assertRecordExists(["personId" => 1, "firstName" => "Ian", "lastName" => "Harrigan", "iconId" => 1, "contractDocument" => Bytes.ofString("this is ians contract document"), "hourlyRate" => 111.222], result.data);
+            assertRecordExists(["personId" => 2, "firstName" => "Bob", "lastName" => "Barker", "iconId" => 3, "contractDocument" => null, "hourlyRate" => 333.444], result.data);
+            assertRecordExists(["personId" => 3, "firstName" => "Tim", "lastName" => "Mallot", "iconId" => 2, "contractDocument" => null, "hourlyRate" => 555.666], result.data);
+            assertRecordExists(["personId" => 4, "firstName" => "Jim", "lastName" => "Parker", "iconId" => 1, "contractDocument" => null, "hourlyRate" => 777.888], result.data);
             return db.table("Person_Organization");
         }).then(result -> {
             Assert.notNull(result.table);

@@ -41,10 +41,12 @@ class TestUpdate implements ITest {
             Assert.equals("Ian", result.data.field("firstName"));
             Assert.equals("Harrigan", result.data.field("lastName"));
             Assert.equals(1, result.data.field("iconId"));
+            Assert.equals(111.222, result.data.field("hourlyRate"));
 
             var record = result.data;
             record.field("firstName", "IAN_MODIFIED");
             record.field("lastName", "HARRIGAN_MODIFIED");
+            record.field("hourlyRate", 999.123);
 
             return result.table.update(query($personId = 1), record);
         }).then(result -> {
@@ -52,6 +54,7 @@ class TestUpdate implements ITest {
             Assert.equals("IAN_MODIFIED", result.data.field("firstName"));
             Assert.equals("HARRIGAN_MODIFIED", result.data.field("lastName"));
             Assert.equals(1, result.data.field("iconId"));
+            Assert.equals(999.123, result.data.field("hourlyRate"));
 
             return result.table.findOne(query($personId = 1));
         }).then(result -> {
@@ -59,6 +62,7 @@ class TestUpdate implements ITest {
             Assert.equals("IAN_MODIFIED", result.data.field("firstName"));
             Assert.equals("HARRIGAN_MODIFIED", result.data.field("lastName"));
             Assert.equals(1, result.data.field("iconId"));
+            Assert.equals(999.123, result.data.field("hourlyRate"));
 
         }).then(result -> {
             async.done();

@@ -33,7 +33,8 @@ class DBCreator {
                         {name: "lastName", type: Text(50)},
                         {name: "firstName", type: Text(50)},
                         {name: "iconId", type: Number},
-                        {name: "contractDocument", type: Binary}
+                        {name: "contractDocument", type: Binary},
+                        {name: "hourlyRate", type: Decimal}
                     ]);
                 }
                 return null;
@@ -96,10 +97,10 @@ class DBCreator {
                 return db.table("Person");
             }).then(result -> {
                 return result.table.addAll([
-                    Person(1, 'Ian', 'Harrigan', 1, Bytes.ofString("this is ians contract document")),
-                    Person(2, 'Bob', 'Barker', 3),
-                    Person(3, 'Tim', 'Mallot', 2),
-                    Person(4, 'Jim', 'Parker', 1)
+                    Person(1, 'Ian', 'Harrigan', 1, Bytes.ofString("this is ians contract document"), 111.222),
+                    Person(2, 'Bob', 'Barker', 3, null, 333.444),
+                    Person(3, 'Tim', 'Mallot', 2, null, 555.666),
+                    Person(4, 'Jim', 'Parker', 1, null, 777.888)
                 ]);
             }).then(result -> {
                 return db.table("Organization");
@@ -136,7 +137,7 @@ class DBCreator {
         return r;
     }
 
-    private static function Person(personId:Int, firstName:String, lastName:String, iconId:Int, contractDocument:Bytes = null):Record {
+    private static function Person(personId:Int, firstName:String, lastName:String, iconId:Int, contractDocument:Bytes, hourlyRate:Float):Record {
         var r = new Record();
         r.field("personId", personId);
         r.field("firstName", firstName);
@@ -145,6 +146,7 @@ class DBCreator {
         if (contractDocument != null) {
             r.field("contractDocument", contractDocument);
         }
+        r.field("hourlyRate", hourlyRate);
         return r;
     }
 
