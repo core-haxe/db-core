@@ -15,7 +15,7 @@ class DatabaseSchema {
 
     public function setTableSchema(name:String, schema:TableSchema) {
         for (i in 0...tables.length) {
-            if (tables[i].name == name) {
+            if (tables[i].name.toLowerCase() == name.toLowerCase()) {
                 tables[i] = schema;
                 break;
             }
