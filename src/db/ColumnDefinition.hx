@@ -11,7 +11,9 @@ class ColumnDefinition {
             name: this.name,
             type: this.type
         }
-        c.options = this.options.copy();
+        if (this.options != null) {
+            c.options = this.options.copy();
+        }
         return c;
     }
 }

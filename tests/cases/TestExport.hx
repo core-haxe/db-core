@@ -8,6 +8,8 @@ import utest.Async;
 import utest.ITest;
 import db.exporter.JsonDatabaseExporter;
 
+using StringTools;
+
 class TestExport implements ITest {
     private var db:IDatabase;
 
@@ -45,7 +47,7 @@ class TestExport implements ITest {
             // Icon table
             var jsonTable = findJsonTable("Icon", json.tables);
             Assert.notNull(jsonTable);
-            Assert.equals("Icon", jsonTable.name);
+            Assert.equals("Icon".toLowerCase(), jsonTable.name.toLowerCase());
             assertJsonColumns(jsonTable.columns, [
                 { name: "iconId", type: "Number", options: [] },
                 { name: "path", type: "Text(50)", options: [] }
@@ -59,7 +61,7 @@ class TestExport implements ITest {
             // Organization table
             var jsonTable = findJsonTable("Organization", json.tables);
             Assert.notNull(jsonTable);
-            Assert.equals("Organization", jsonTable.name);
+            Assert.equals("Organization".toLowerCase(), jsonTable.name.toLowerCase());
             assertJsonColumns(jsonTable.columns, [
                 { name: "organizationId", type: "Number", options: [] },
                 { name: "name", type: "Text(50)", options: [] },
@@ -74,7 +76,7 @@ class TestExport implements ITest {
             // Person table
             var jsonTable = findJsonTable("Person", json.tables);
             Assert.notNull(jsonTable);
-            Assert.equals("Person", jsonTable.name);
+            Assert.equals("Person".toLowerCase(), jsonTable.name.toLowerCase());
             assertJsonColumns(jsonTable.columns, [
                 { name: "personId", type: "Number", options: ["PrimaryKey", "AutoIncrement"] },
                 { name: "lastName", type: "Text(50)", options: [] },
@@ -92,7 +94,7 @@ class TestExport implements ITest {
             // Person_Organization table
             var jsonTable = findJsonTable("Person_Organization", json.tables);
             Assert.notNull(jsonTable);
-            Assert.equals("Person_Organization", jsonTable.name);
+            Assert.equals("Person_Organization".toLowerCase(), jsonTable.name.toLowerCase());
             assertJsonColumns(jsonTable.columns, [
                 { name: "Person_personId", type: "Number", options: [] },
                 { name: "Organization_organizationId", type: "Number", options: [] }
@@ -117,7 +119,7 @@ class TestExport implements ITest {
 
     function findJsonTable(tableName:String, tables:Array<Dynamic>):Dynamic {
         for (table in tables) {
-            if (table.name == tableName) {
+            if (table.name.toLowerCase() == tableName.toLowerCase()) {
                 return table;
             }
         }

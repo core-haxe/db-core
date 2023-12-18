@@ -48,8 +48,10 @@ class JsonDatabaseExporter extends DatabaseExporter {
         json.name = column.name;
         json.type = columnTypeToString(column.type);
         json.options = [];
-        for (o in column.options) {
-            json.options.push(columnOptionToString(o));
+        if (column.options != null) {
+            for (o in column.options) {
+                json.options.push(columnOptionToString(o));
+            }
         }
         return json;
     }

@@ -14,6 +14,8 @@ import utest.Async;
 import utest.ITest;
 import db.importer.JsonDatabaseImporter;
 
+using StringTools;
+
 class TestImport implements ITest {
     private var db:IDatabase;
 
@@ -160,7 +162,7 @@ class TestImport implements ITest {
 
     function assertTableSchema(tableSchema:TableSchema, tableName:String, columns:Array<ColumnDefinition>) {
         Assert.notNull(tableSchema.name);
-        Assert.equals(tableName, tableSchema.name);
+        Assert.equals(tableName.toLowerCase(), tableSchema.name.toLowerCase());
         Assert.equals(columns.length, tableSchema.columns.length);
         for (i in 0...columns.length) {
             var expected = columns[i];

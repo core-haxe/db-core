@@ -14,7 +14,6 @@ class DatabaseExporter implements IDatabaseExporter {
                 var schema:DatabaseSchema = result.data;
                 finalSchema = schema.clone();
                 // TODO: remove unneeded tables etc
-
                 var promises = [];
                 for (table in finalSchema.tables) {
                     var getData = true;
@@ -67,6 +66,9 @@ class DatabaseExporter implements IDatabaseExporter {
     }
 
     private function columnTypeToString(type:ColumnType):String {
+        if (type == null) {
+            return null;
+        }
         return switch (type) {
             case Number:    'Number';
             case Decimal:   'Decimal';
