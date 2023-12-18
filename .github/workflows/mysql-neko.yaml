@@ -1,0 +1,47 @@
+name: mysql neko
+
+on:
+  push:
+  pull_request:
+  repository_dispatch:
+
+jobs:
+  run-tests:
+    uses: vegardit/haxe-reusable-workflows/.github/workflows/test-with-haxe.yml@v1
+    strategy:
+      fail-fast: false
+      matrix:
+        os:
+          - ubuntu-latest
+        haxe:
+          - 4.2.5
+    with:
+      runner-os: ${{ matrix.os }}
+      haxe-version: ${{ matrix.haxe }}
+      haxe-libs: |
+        utest
+      test-neko:  tests/common.hxml --class-path tests
+
+      before-tests: |
+        echo "MYSQL_HOST=localhost" >> $GITHUB_ENV
+        echo "MYSQL_USER=root" >> $GITHUB_ENV
+        echo "MYSQL_PASS=root" >> $GITHUB_ENV
+        echo "DB_CORE_BACKEND=mysql" >> $GITHUB_ENV
+        sudo systemctl start mysql.service
+
+        git clone https://github.com/core-haxe/promises
+        haxelib dev promises promises
+        git clone https://github.com/core-haxe/logging
+        haxelib dev logging logging
+        git clone https://github.com/core-haxe/libsqlite3
+        haxelib dev libsqlite3 libsqlite3
+        git clone https://github.com/core-haxe/sqlite3
+        haxelib dev sqlite3 sqlite3
+        git clone https://github.com/core-haxe/db-core
+        haxelib dev db-core db-core
+        git clone https://github.com/core-haxe/db-sqlite
+        haxelib dev db-sqlite db-sqlite
+        git clone https://github.com/core-haxe/mysql
+        haxelib dev mysql mysql
+        git clone https://github.com/core-haxe/db-mysql
+        haxelib dev db-mysql db-mysql
