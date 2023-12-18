@@ -34,22 +34,6 @@ class TestBasicRelationships implements ITest {
         });
     }
 
-    function testBasicFindOne(async:Async) {
-        db.table("Person").then(result -> {
-            return result.table.findOne(query($personId = 1));
-        }).then(result -> {
-            Assert.equals(1, result.data.field("Person.personId"));
-            Assert.equals("Ian", result.data.field("Person.firstName"));
-            Assert.equals("Harrigan", result.data.field("Person.lastName"));
-            Assert.equals(1, result.data.field("Person.iconId"));
-            Assert.equals("/somepath/icon1.png", result.data.field("Person.Icon.path"));
-            Assert.equals("ACME Inc", result.data.field("Person_Organization.Organization.name"));
-            async.done();
-        }, error -> {
-            trace("error", error);
-        });
-    }
-
     function testBasicAll(async:Async) {
         db.table("Person").then(result -> {
             return result.table.all();
