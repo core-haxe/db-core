@@ -67,6 +67,8 @@ class DBCreator {
                     db.defineTableRelationship("Person.iconId", "Icon.iconId");
                     db.defineTableRelationship("Person.personId", "Person_Organization.Person_personId");
                     db.defineTableRelationship("Person_Organization.Organization_organizationId", "Organization.organizationId");
+                } else {
+                    db.clearTableRelationships();
                 }
                 if (createDummyData) {
                     addDummyData(db).then(_ -> {

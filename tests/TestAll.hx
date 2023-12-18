@@ -50,9 +50,7 @@ class TestAll {
         runner.addCase(new TestImport(db));
         #end
 
-        #if nodejs // for another day
         runner.addCase(new TestBasicRelationships(db));
-        #end
     }
 
     private static function sqlite():IDatabase {

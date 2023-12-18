@@ -2,17 +2,14 @@ package cases;
 
 import cases.util.ExportData;
 import haxe.io.Bytes;
-import db.TableSchema;
-import db.ColumnDefinition;
-import db.ColumnOptions;
 import db.ColumnType;
-import db.Record;
 import db.IDatabase;
 import utest.Assert;
 import cases.util.DBCreator;
 import utest.Async;
 import utest.ITest;
 import db.importer.JsonDatabaseImporter;
+import cases.util.AssertionTools.*;
 
 using StringTools;
 
@@ -126,71 +123,5 @@ class TestImport implements ITest {
             trace(error);
             async.done();
         });
-    }
-
-    function assertRecordExists(data:Map<String, Any>, records:Array<Record>) {
-        var found = false;
-        for (record in records) {
-            var isMatch = true;
-            for (fieldName in record.fieldNames) {
-                var fieldValue = record.field(fieldName);
-                if (fieldValue == null && data.get(fieldName) == null) {
-                    break;
-                } else {
-                    if ((fieldValue is Bytes)) {
-                        #if !hl // hl oddness with bytes
-                        if (!data.exists(fieldName) || cast(data.get(fieldName), Bytes).toString() != cast(fieldValue, Bytes).toString()) {
-                            isMatch = false;
-                            break;
-                        }
-                        #end
-                    } else {
-                        if (!data.exists(fieldName) || data.get(fieldName) != fieldValue) {
-                            isMatch = false;
-                            break;
-                        }
-                    }
-                }
-            }
-            if (isMatch) {
-                found = true;
-                break;
-            }
-        }
-        Assert.equals(true, found);
-    }
-
-    function assertTableSchema(tableSchema:TableSchema, tableName:String, columns:Array<ColumnDefinition>) {
-        Assert.notNull(tableSchema.name);
-        Assert.equals(tableName.toLowerCase(), tableSchema.name.toLowerCase());
-        Assert.equals(columns.length, tableSchema.columns.length);
-        for (i in 0...columns.length) {
-            var expected = columns[i];
-            var actual = tableSchema.columns[i];
-            Assert.equals(expected.name, actual.name);
-            assertColumnType(expected.type, actual.type);
-            assertColumnOptions(expected.options, actual.options);
-        }
-    }
-
-    function assertColumnType(expected:ColumnType, actual:ColumnType) {
-        switch (expected) {
-            case Text(n1):
-                switch (actual) {
-                    case Text(n2):
-                        Assert.equals(n1, n2);
-                    case _:
-                        Assert.fail("expected Text");
-                }
-            case _:
-                Assert.equals(expected, actual);
-        }
-    }
-
-    function assertColumnOptions(expected:Array<ColumnOptions>, actual:Array<ColumnOptions>) {
-        Assert.equals(expected.length, actual.length);
-        for (i in 0...expected.length) {
-            Assert.equals(expected[i], actual[i]);
-        }
     }
 }
