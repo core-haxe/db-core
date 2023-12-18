@@ -26,6 +26,7 @@ jobs:
         echo "MYSQL_HOST=localhost" >> $GITHUB_ENV
         echo "MYSQL_USER=root" >> $GITHUB_ENV
         echo "MYSQL_PASS=root" >> $GITHUB_ENV
+        echo "DB_CORE_BACKEND=mysql" >> $GITHUB_ENV
         sudo systemctl start mysql.service
 
         git clone https://github.com/core-haxe/promises

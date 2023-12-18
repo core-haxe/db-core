@@ -11,8 +11,20 @@ class TestAll {
     public static function main() {
         var runner = new Runner();
 
-        addCases(runner, sqlite());
-//        addCases(runner, mysql());
+        var databaseBackend = Sys.getEnv("DB_CORE_BACKEND");
+        if (databaseBackend == null) {
+            databaseBackend = "sqlite";
+        }
+
+        trace("DB_CORE_BACKEND: " + databaseBackend);
+        if (databaseBackend == "sqlite") {
+            addCases(runner, sqlite());
+        } else if (databaseBackend == "mysql") {
+            trace("MYSQL_HOST: " + Sys.getEnv("MYSQL_HOST"));
+            trace("MYSQL_USER: " + Sys.getEnv("MYSQL_USER"));
+            trace("MYSQL_PASS: " + Sys.getEnv("MYSQL_PASS"));
+            addCases(runner, mysql());
+        }
 
         Report.create(runner, SuccessResultsDisplayMode.AlwaysShowSuccessResults, HeaderDisplayMode.NeverShowHeader);
         runner.run();
