@@ -1,7 +1,11 @@
-<a href="https://github.com/core-haxe/db-core/actions/workflows/nodejs.yaml"><img src="https://github.com/core-haxe/db-core/actions/workflows/nodejs.yaml/badge.svg">
-<a href="https://github.com/core-haxe/db-core/actions/workflows/hl.yaml"><img src="https://github.com/core-haxe/db-core/actions/workflows/hl.yaml/badge.svg">
-<a href="https://github.com/core-haxe/db-core/actions/workflows/hxcpp.yaml"><img src="https://github.com/core-haxe/db-core/actions/workflows/hxcpp.yaml/badge.svg">
-<a href="https://github.com/core-haxe/db-core/actions/workflows/neko.yaml"><img src="https://github.com/core-haxe/db-core/actions/workflows/neko.yaml/badge.svg">
+<a href="https://github.com/core-haxe/db-core/actions/workflows/sqlite-nodejs.yaml"><img src="https://github.com/core-haxe/db-core/actions/workflows/sqlite-nodejs.yaml/badge.svg"></a>
+<a href="https://github.com/core-haxe/db-core/actions/workflows/sqlite-hxcpp.yaml"><img src="https://github.com/core-haxe/db-core/actions/workflows/sqlite-hxcpp.yaml/badge.svg"></a>
+<a href="https://github.com/core-haxe/db-core/actions/workflows/sqlite-hl.yaml"><img src="https://github.com/core-haxe/db-core/actions/workflows/sqlite-hl.yaml/badge.svg"></a>
+<a href="https://github.com/core-haxe/db-core/actions/workflows/sqlite-neko.yaml"><img src="https://github.com/core-haxe/db-core/actions/workflows/sqlite-neko.yaml/badge.svg"></a>
+
+<a href="https://github.com/core-haxe/db-core/actions/workflows/mysql-nodejs.yaml"><img src="https://github.com/core-haxe/db-core/actions/workflows/mysql-nodejs.yaml/badge.svg"></a>
+<a href="https://github.com/core-haxe/db-core/actions/workflows/mysql-hxcpp.yaml"><img src="https://github.com/core-haxe/db-core/actions/workflows/mysql-hxcpp.yaml/badge.svg"></a>
+
 # db-core
 pluggable database abstraction
 
