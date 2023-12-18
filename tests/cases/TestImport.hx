@@ -1,13 +1,12 @@
 package cases;
 
-import haxe.io.Path;
+import cases.util.ExportData;
 import haxe.io.Bytes;
 import db.TableSchema;
 import db.ColumnDefinition;
 import db.ColumnOptions;
 import db.ColumnType;
 import db.Record;
-import sys.io.File;
 import db.IDatabase;
 import utest.Assert;
 import cases.util.DBCreator;
@@ -43,7 +42,7 @@ class TestImport implements ITest {
     }
 
     function testImport_Json_All_String(async:Async) {
-        var jsonString = File.getContent(Path.normalize(Sys.getCwd() + "resources/export/Persons.json"));
+        var jsonString = ExportData.Persons;
         Assert.notNull(jsonString);
         Assert.isTrue(jsonString.length > 0);
 

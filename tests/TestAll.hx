@@ -35,9 +35,6 @@ class TestAll {
         #if !neko
         runner.addCase(new TestBinary(db));
         runner.addCase(new TestExport(db));
-        #end
-
-        #if local // need to work out how to include resources on GH actions for now local only 
         runner.addCase(new TestImport(db));
         #end
 
