@@ -72,4 +72,18 @@ class RelationshipDefinitions {
     public function keys():Iterator<String> {
         return _defs.keys();
     }
+
+    public function debugString() {
+        var sb = new StringBuf();
+        for (key in _defs.keys()) {
+            sb.add(key);
+            sb.add("\n");
+            for (item in _defs.get(key)) {
+                sb.add("    ");
+                sb.add(item.table1 + "." + item.field1 + " <==> " + item.table2 + "." + item.field2);
+                sb.add("\n");
+            }
+        }
+        return sb.toString();
+    }
 }

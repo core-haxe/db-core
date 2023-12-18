@@ -31,4 +31,12 @@ class DatabaseSchema {
         }
         return c;
     }
+
+    public function debugString() {
+        var sb = new StringBuf();
+        for (table in tables) {
+            sb.add(table.debugString());
+        }
+        return sb.toString();
+    }
 }

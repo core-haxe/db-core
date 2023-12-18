@@ -16,4 +16,14 @@ class ColumnDefinition {
         }
         return c;
     }
+
+    public function debugString() {
+        var sb = new StringBuf();
+        sb.add(name);
+        sb.add(": ");
+        sb.add(type);
+        sb.add(", ");
+        sb.add(options);
+        return sb.toString();
+    }
 }

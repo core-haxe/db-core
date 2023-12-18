@@ -71,4 +71,17 @@ class TableSchema {
         }
         return c;
     }
+
+    public function debugString() {
+        var sb = new StringBuf();
+        sb.add(name);
+        sb.add(":");
+        sb.add("\n");
+        for (column in columns) {
+            sb.add("    ");
+            sb.add(column.debugString());
+            sb.add("\n");
+        }
+        return sb.toString();
+    }
 }
