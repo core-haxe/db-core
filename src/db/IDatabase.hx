@@ -11,6 +11,7 @@ interface IDatabase {
 
     public function defineTableRelationship(field1:String, field2:String):Void;
     public function definedTableRelationships():RelationshipDefinitions;
+    public function clearTableRelationships():Void;
 
     public function connect():Promise<DatabaseResult<Bool>>;
     public function disconnect():Promise<DatabaseResult<Bool>>;
