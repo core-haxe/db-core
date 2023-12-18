@@ -29,6 +29,10 @@ jobs:
         echo "DB_CORE_BACKEND=mysql" >> $GITHUB_ENV
         sudo systemctl start mysql.service
 
+        # super hack for sys.db (will write externs eventually to update mysql client)
+        sudo mysql -u root -p root -e 'ALTER USER "root"@"localhost" IDENTIFIED WITH mysql_native_password BY "root";'
+        sudo mysql -u root -p root -e 'flush privileges;'
+
         git clone https://github.com/core-haxe/promises
         haxelib dev promises promises
         git clone https://github.com/core-haxe/logging
