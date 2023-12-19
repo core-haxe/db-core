@@ -125,6 +125,7 @@ class DBCreator {
             }).then(result -> {
                 resolve(true);
             }, error -> {
+                trace(haxe.Json.stringify(error));
                 trace(error);
             });
         });
