@@ -53,6 +53,13 @@ private class RecordSetImpl {
         records.push(record);
     }
 
+    public function filter(f:Record->Bool):RecordSet {
+        if (records == null) {
+            return [];
+        }
+        return records.filter(f);
+    }
+
     public function copy():RecordSet {
         return new RecordSet(this.records);
     }
