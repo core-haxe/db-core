@@ -48,7 +48,7 @@ class DatabaseExporter implements IDatabaseExporter {
         });
     }
 
-    private function getAllTableData(db:IDatabase, tableName:String):Promise<Array<Record>> {
+    private function getAllTableData(db:IDatabase, tableName:String):Promise<RecordSet> {
         return new Promise((resolve, reject) -> {
             db.table(tableName).then(result -> {
                 return result.table.all();

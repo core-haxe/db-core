@@ -4,7 +4,7 @@ package db;
 class TableSchema {
     @:optional public var name:String;
     @:optional public var columns:Array<ColumnDefinition> = [];
-    @:optional public var data:Array<Record>;
+    @:optional public var data:RecordSet;
 
     public function equals(other:TableSchema) {
         if (this.name != other.name) {

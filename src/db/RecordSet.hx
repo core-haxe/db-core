@@ -52,6 +52,10 @@ private class RecordSetImpl {
         }
         records.push(record);
     }
+
+    public function copy():RecordSet {
+        return new RecordSet(this.records);
+    }
 }
 
 private class RecordSetIterator {
