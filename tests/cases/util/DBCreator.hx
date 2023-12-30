@@ -16,6 +16,8 @@ class DBCreator {
             if ((db is SqliteDatabase)) {
                 File.saveContent("persons.db", "");
             }
+            db.setProperty("autoReconnect", true);
+            db.setProperty("replayQueriesOnReconnection", true);
             db.connect().then(_ -> {
                 if ((db is SqliteDatabase)) {
                     return null;
