@@ -12,9 +12,13 @@ class DatabaseTypes {
         Sys.println('registering database type ${c} (${id})');
         var parts = c.split(".");
         var name = parts.pop();
+        #if (haxe >= version("4.3.0"))
         Context.onAfterInitMacros(() -> {
             Context.resolveType(TPath({pack: parts, name: name}), Context.currentPos());
         });
+        #else
+        Context.resolveType(TPath({pack: parts, name: name}), Context.currentPos());
+        #end
         if (!typeClasses.exists(id)) {
             typeClasses.set(id, c);
         }
