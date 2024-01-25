@@ -70,7 +70,7 @@ class SqlUtils {
         var sql = 'SELECT ${fieldList} FROM ${table.name}';
 
         if (query != null) {
-            sql += '\nWHERE (${Query.queryExprToSql(query, values)})';
+            sql += '\nWHERE (${Query.queryExprToSql(query, values, table.name)})';
         }
         sql += ';';
         return sql;
@@ -165,7 +165,7 @@ class SqlUtils {
     public static function buildDeleteWhere(table:ITable, query:QueryExpr):String {
         var sql = 'DELETE FROM ${table.name}';
         if (query != null) {
-            sql += ' WHERE (${Query.queryExprToSql(query)})';
+            sql += ' WHERE (${Query.queryExprToSql(query, null, table.name)})';
         }
         sql += ';';
         return sql;
@@ -190,7 +190,7 @@ class SqlUtils {
             }
         }
         sql += '${placeholders.join(", ")}';
-        sql += ' WHERE (${Query.queryExprToSql(query)})';
+        sql += ' WHERE (${Query.queryExprToSql(query, values, table.name)})';
         sql += ';';
         return sql;
     }
