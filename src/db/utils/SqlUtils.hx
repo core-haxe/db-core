@@ -190,7 +190,7 @@ class SqlUtils {
             }
         }
         sql += '${placeholders.join(", ")}';
-        sql += ' WHERE (${Query.queryExprToSql(query)})';
+        sql += ' WHERE (${Query.queryExprToSql(query, values, table.name)})';
         sql += ';';
         return sql;
     }
