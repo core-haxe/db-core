@@ -14,7 +14,7 @@ jobs:
         os:
           - ubuntu-20.04
         haxe:
-          - 4.2.5
+          - 4.3.3
     with:
       runner-os: ${{ matrix.os }}
       haxe-version: ${{ matrix.haxe }}
