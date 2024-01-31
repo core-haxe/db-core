@@ -9,11 +9,31 @@
 # db-core
 pluggable database abstraction
 
+# db plugins
+
+### mysql
+
+```haxe
+var db:IDatabase = DatabaseFactory.instance.createDatabase(DatabaseFactory.MYSQL, {
+    database: "somedb",
+    host: "localhost",
+    user: "someuser",
+    pass: "somepassword"
+});
+```
+_Note: must include [__db-mysql__](https://github.com/core-haxe/db-mysql) for plugin to be auto-registered_
+
+### sqlite
+
+```haxe
+var db:IDatabase = DatabaseFactory.instance.createDatabase(DatabaseFactory.SQLITE, {
+    filename: "somedb.db"
+});
+```
+_Note: must include [__db-sqlite__](https://github.com/core-haxe/db-sqlite) for plugin to be auto-registered_
+
 # basic usage
 
-> [!NOTE]  
-> The following snippet shows usage _after_ you have created an instance of the db, this is dependant on which plugin you choose, options are at the [end of this readme](#db-plugins).
-> 
 ```haxe
 db.connect().then(result -> {
     return result.database.createTable("Persons", [
@@ -132,26 +152,3 @@ db.connect().then(result -> {
 |-----------------|------------------|-----------------|---------------|--------------------|------------------|-------------------------------------|-------------------------------------------|-----------------------------|-------------------|--------------------------|---------------------|------------------------|
 | 2               | Ian              | Harrigan        | 3             | 3                  | icon3.png        | 2                                   | 1                                         | 1                           | haxeui            | 2                        | 2                   | icon2.png              |
 | 2               | Ian              | Harrigan        | 3             | 3                  | icon3.png        | 2                                   | 3                                         | 3                           | inps              | 3                        | 3                   | icon3.png              |
-
-# db plugins
-
-## mysql
-
-```haxe
-var db:IDatabase = DatabaseFactory.instance.createDatabase(DatabaseFactory.MYSQL, {
-    database: "somedb",
-    host: "localhost",
-    user: "someuser",
-    pass: "somepassword"
-});
-```
-_Note: must include [__db-mysql__](https://github.com/core-haxe/db-mysql) for plugin to be auto-registered_
-
-## sqlite
-
-```haxe
-var db:IDatabase = DatabaseFactory.instance.createDatabase(DatabaseFactory.SQLITE, {
-    filename: "somedb.db"
-});
-```
-_Note: must include [__db-sqlite__](https://github.com/core-haxe/db-sqlite) for plugin to be auto-registered_
