@@ -12,7 +12,7 @@ pluggable database abstraction
 # basic usage
 
 ```haxe
-db.connect().then(result -> ´
+db.connect().then(result -> {
     return result.database.createTable("Persons", [
         {name: "PersonID", type: Number, options: [PrimaryKey, NotNull, AutoIncrement]},
         {name: "FirstName", type: Text(50), options: [NotNull]},
