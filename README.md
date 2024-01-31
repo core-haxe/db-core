@@ -48,7 +48,7 @@ db.connect().then(result -> {
     return result.table.add(record);
 }).then(result -> {
     DebugUtils.printRecords([result.data]);
-    return resut.table.all();
+    return result.table.all();
 }).then(result -> {
     DebugUtils.printRecords(result.data);
     return result.table.findOne(query($FirstName = "Ian" && $LastName = "Harrigan")); // "find" will return an array of records instead
