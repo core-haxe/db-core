@@ -12,7 +12,7 @@ pluggable database abstraction
 # basic usage
 
 > [!NOTE]  
-> The following snippet shows usage _after_ you have created an instance of the db, this is dependant on which plugin you choose, options are at the end of this readme.
+> The following snippet shows usage _after_ you have created an instance of the db, this is dependant on which plugin you choose, options are at the [end of this readme](#db-plugins).
 > 
 ```haxe
 db.connect().then(result -> {
