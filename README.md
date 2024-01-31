@@ -11,6 +11,9 @@ pluggable database abstraction
 
 # basic usage
 
+> [!NOTE]  
+> The following snippet shows usage _after_ you have created an instance of the db, this is dependant on which plugin you choose, options are at the end of this readme.
+> 
 ```haxe
 db.connect().then(result -> {
     return result.database.createTable("Persons", [
@@ -130,7 +133,9 @@ db.connect().then(result -> {
 | 2               | Ian              | Harrigan        | 3             | 3                  | icon3.png        | 2                                   | 1                                         | 1                           | haxeui            | 2                        | 2                   | icon2.png              |
 | 2               | Ian              | Harrigan        | 3             | 3                  | icon3.png        | 2                                   | 3                                         | 3                           | inps              | 3                        | 3                   | icon3.png              |
 
-# mysql
+# db plugins
+
+## mysql
 
 ```haxe
 var db:IDatabase = DatabaseFactory.instance.createDatabase(DatabaseFactory.MYSQL, {
@@ -142,7 +147,7 @@ var db:IDatabase = DatabaseFactory.instance.createDatabase(DatabaseFactory.MYSQL
 ```
 _Note: must include [__db-mysql__](https://github.com/core-haxe/db-mysql) for plugin to be auto-registered_
 
-# sqlite
+## sqlite
 
 ```haxe
 var db:IDatabase = DatabaseFactory.instance.createDatabase(DatabaseFactory.SQLITE, {
