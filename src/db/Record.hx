@@ -66,6 +66,37 @@ class Record {
         return sb.toString();
     }
 
+    public function equals(other:Record) {
+        var thisFieldNames = this.fieldNames;
+        var otherFieldNames = other.fieldNames;
+        if (thisFieldNames.length != otherFieldNames.length) {
+            return false;
+        }
+
+        var thisData = this.data;
+        var otherData = other.data;
+
+        for (thisFieldName in thisFieldNames) {
+            if (!otherData.exists(thisFieldName)) {
+                return false;
+            }
+        }
+
+        for (otherFieldName in otherFieldNames) {
+            if (!thisData.exists(otherFieldName)) {
+                return false;
+            }
+        }
+
+        for (thisFieldName in thisFieldNames) {
+            if (thisData.get(thisFieldName) != otherData.get(thisFieldName)) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
     public static function fromDynamic(data:Dynamic):Record {
         var r = new Record();
         for (f in Reflect.fields(data)) {
