@@ -55,6 +55,12 @@ class Record {
         data.remove(name);
     }
 
+    public function copy():Record {
+        var c = new Record();
+        c.data = this.data.copy();
+        return c;
+    }
+
     public function debugString():String {
         var sb = new StringBuf();
         for (f in data.keys()) {
@@ -64,6 +70,13 @@ class Record {
             sb.add("; ");
         }
         return sb.toString();
+    }
+
+    public function merge(other:Record) {
+        for (key in other.data.keys()) {
+            var value = other.data.get(key);
+            data.set(key, value);
+        }
     }
 
     public function equals(other:Record) {
