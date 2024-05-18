@@ -63,6 +63,28 @@ private class RecordSetImpl {
     public function copy():RecordSet {
         return new RecordSet(this.records);
     }
+
+    public function normalizeFieldNames() { // ensures that all fields have max of 2 "." - can be useful when working with joins
+        for (r in records) @:privateAccess {
+            for (fieldName in r.data.keys()) {
+                if (fieldName.indexOf(".") != -1) {
+                    var fieldNameParts = fieldName.split(".");
+                    var newFieldName = null;
+                    if (fieldNameParts.length > 2) {
+                        while (fieldNameParts.length > 2) {
+                            fieldNameParts.shift();
+                        }
+                        newFieldName = fieldNameParts.join(".");
+                    }
+
+                    if (newFieldName != null) {
+                        r.field(newFieldName, r.field(fieldName));
+                        r.removeField(fieldName);
+                    }
+                }
+            }
+        }
+    }
 }
 
 private class RecordSetIterator {
