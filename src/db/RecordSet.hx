@@ -60,8 +60,58 @@ private class RecordSetImpl {
         return records.filter(f);
     }
 
+    public function findRecord(fieldName:String, fieldValue:Any):Record {
+        if (records == null) {
+            return null;
+        }
+
+        for (r in records) {
+            if (r.field(fieldName) == fieldValue) {
+                return r;
+            }
+        }
+
+        return null;
+    }
+
+    public function extractFieldValues(fieldName:String):Array<Any> {
+        if (records == null) {
+            return [];
+        }
+
+        var values = [];
+        for (r in records) {
+            var v = r.field(fieldName);
+            if (v != null) {
+                values.push(v);
+            }
+        }
+
+        return values;
+    }
+
+    public function renameField(fieldName:String, newFieldName:String) {
+        if (records == null) {
+            return;
+        }
+
+        for (r in records) {
+            r.renameField(fieldName, newFieldName);
+        }
+    }
+
+    public function copyField(fieldName:String, newFieldName:String) {
+        if (records == null) {
+            return;
+        }
+
+        for (r in records) {
+            r.copyField(fieldName, newFieldName);
+        }
+    }
+
     public function copy():RecordSet {
-        return new RecordSet(this.records);
+        return new RecordSet(this.records.copy());
     }
 
     public function normalizeFieldNames() { // ensures that all fields have max of 2 "." - can be useful when working with joins

@@ -22,6 +22,21 @@ class Record {
         return data.exists(name);
     }
 
+    public function renameField(fieldName:String, newFieldName:String) {
+        if (data.exists(fieldName)) {
+            var v = data.get(fieldName);
+            data.set(newFieldName, v);
+            data.remove(fieldName);
+        }
+    }
+
+    public function copyField(fieldName:String, newFieldName:String) {
+        if (data.exists(fieldName)) {
+            var v = data.get(fieldName);
+            data.set(newFieldName, v);
+        }
+    }
+
     public function field(name:String, value:Any = null):Any { // if value is non null, this is effectively a setter
         if (value != null) {
             data.set(name, value);
