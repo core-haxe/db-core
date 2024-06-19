@@ -74,12 +74,12 @@ private class RecordSetImpl {
         return null;
     }
 
-    public function extractFieldValues(fieldName:String):Array<Any> {
+    public function extractFieldValues<T>(fieldName:String):Array<T> {
         if (records == null) {
             return [];
         }
 
-        var values = [];
+        var values:Array<T> = [];
         for (r in records) {
             var v = r.field(fieldName);
             if (v != null) {

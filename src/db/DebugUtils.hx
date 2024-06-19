@@ -5,10 +5,13 @@ using StringTools;
 class DebugUtils {
     public static function printRecords(records:Array<Record>, name:String = null) {
         var colSizes:Map<String, Int> = [];
-        if (records.length == 0) {
+        if (records == null || records.length == 0) {
             if (name != null) {
                 Sys.println(name + ": no records!");
+            } else {
+                Sys.println("no records!");
             }
+            return;
         }
         // first get max sizes
         var r = records[0];

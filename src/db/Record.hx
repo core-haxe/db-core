@@ -15,6 +15,15 @@ class Record {
         return list;
     }
 
+    public var fieldCount(get, null):Int;
+    private function get_fieldCount():Int {
+        var n = 0;
+        for (_ in data.keys()) {
+            n++;
+        }
+        return n;
+    }
+
     public function hasField(name:String):Bool {
         if (data == null) {
             return false;
@@ -35,6 +44,41 @@ class Record {
             var v = data.get(fieldName);
             data.set(newFieldName, v);
         }
+    }
+
+    public function filterFields(callback:String->Any->Bool) {
+        var newData:Map<String, Any> = [];
+        for (fieldName in data.keys()) {
+            var fieldValue = data.get(fieldName);
+            if (callback(fieldName, fieldValue)) {
+                newData.set(fieldName, fieldValue);
+            }
+        }
+        data = newData;
+    }
+
+    public function findFields(callback:String->Bool):Array<String> {
+        var list = [];
+        for (fieldName in data.keys()) {
+            if (callback(fieldName)) {
+                list.push(fieldName);
+            }
+        }
+        return list;
+    }
+
+    public function findFieldValues<T>(callback:String->T->Bool):Array<T> {
+        var list:Array<T> = [];
+        for (fieldName in data.keys()) {
+            var fieldValue = data.get(fieldName);
+            if (fieldValue == null) {
+                continue;
+            }
+            if (callback(fieldName, fieldValue)) {
+                list.push(fieldValue);
+            }
+        }
+        return list;
     }
 
     public function field(name:String, value:Any = null):Any { // if value is non null, this is effectively a setter
