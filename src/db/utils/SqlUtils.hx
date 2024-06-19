@@ -149,6 +149,7 @@ class SqlUtils {
         var placeholders = [];
         for (f in record.fieldNames) {
             var v = record.field(f);
+            f = quoteFieldName(f);
             if ((v is Bytes)) {
                 continue;
             }
@@ -177,6 +178,7 @@ class SqlUtils {
         var placeholders = [];
         for (f in record.fieldNames) {
             var v = record.field(f);
+            f = quoteFieldName(f);
             if (v == null) {
                 placeholders.push('${f} = NULL');
             } else {
@@ -201,5 +203,9 @@ class SqlUtils {
             names.push('`${f}`');
         }
         return names;
+    }
+
+    private static inline function quoteFieldName(f:String) {
+        return '`${f}`';
     }
 }
