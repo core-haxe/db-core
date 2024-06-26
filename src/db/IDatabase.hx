@@ -22,4 +22,8 @@ interface IDatabase {
     public function table(name:String):Promise<DatabaseResult<ITable>>;
     public function createTable(name:String, columns:Array<ColumnDefinition>):Promise<DatabaseResult<ITable>>;
     public function deleteTable(name:String):Promise<DatabaseResult<Bool>>;
+
+    #if allow_raw
+    public function raw(data:String, values:Array<Any> = null):Promise<DatabaseResult<RecordSet>>;
+    #end
 }

@@ -25,4 +25,8 @@ interface ITable {
 
     public function addColumn(column:ColumnDefinition):Promise<DatabaseResult<Bool>>;
     public function removeColumn(column:ColumnDefinition):Promise<DatabaseResult<Bool>>;
+
+    #if allow_raw
+    public function raw(data:String, values:Array<Any> = null):Promise<DatabaseResult<RecordSet>>;
+    #end
 }
