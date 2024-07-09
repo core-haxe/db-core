@@ -30,6 +30,16 @@ class TableSchema {
         return true;
     }
 
+    public function findPrimaryKeyColumns():Array<ColumnDefinition> {
+        var primaryKeyColumns = [];
+        for (column in columns) {
+            if (column.options != null && column.options.contains(PrimaryKey)) {
+                primaryKeyColumns.push(column);
+            }
+        }
+        return primaryKeyColumns;
+    }
+
     public function findColumn(name:String):ColumnDefinition {
         for (column in columns) {
             if (column.name == name) {

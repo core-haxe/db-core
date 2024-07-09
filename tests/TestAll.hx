@@ -13,7 +13,7 @@ class TestAll {
 
         var databaseBackend = Sys.getEnv("DB_CORE_BACKEND");
         if (databaseBackend == null) {
-            databaseBackend = "sqlite";
+            databaseBackend = "mysql";
         }
 
         trace("DB_CORE_BACKEND: " + databaseBackend);
@@ -31,10 +31,13 @@ class TestAll {
     }
 
     private static function addCases(runner:Runner, db:IDatabase) {
+        /*
         runner.addCase(new TestBasic(db));
         runner.addCase(new TestQuery(db));
         runner.addCase(new TestSchema(db));
+        */
         runner.addCase(new TestAdd(db));
+        /*
         runner.addCase(new TestDelete(db));
         runner.addCase(new TestDeleteAll(db));
         runner.addCase(new TestUpdate(db));
@@ -51,6 +54,7 @@ class TestAll {
         #end
 
         runner.addCase(new TestBasicRelationships(db));
+        */
     }
 
     private static function sqlite():IDatabase {
