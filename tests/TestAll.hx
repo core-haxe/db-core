@@ -13,7 +13,7 @@ class TestAll {
 
         var databaseBackend = Sys.getEnv("DB_CORE_BACKEND");
         if (databaseBackend == null) {
-            databaseBackend = "mysql";
+            databaseBackend = "sqlite";
         }
 
         trace("DB_CORE_BACKEND: " + databaseBackend);
