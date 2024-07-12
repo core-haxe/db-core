@@ -7,7 +7,7 @@ interface IDatabase {
     public function setProperty(name:String, value:Any):Void;
     public function getProperty(name:String, defaultValue:Any):Any;
 
-    public function schema():Promise<DatabaseResult<DatabaseSchema>>;
+    public function schema(force:Bool = false):Promise<DatabaseResult<DatabaseSchema>>;
 
     public function defineTableRelationship(field1:String, field2:String):Void;
     public function definedTableRelationships():RelationshipDefinitions;
