@@ -8,7 +8,7 @@ interface ITable {
     public var name:String;
     public var exists:Bool;
 
-    public function schema():Promise<DatabaseResult<TableSchema>>;
+    public function schema(force:Bool = false):Promise<DatabaseResult<TableSchema>>;
     public function applySchema(newSchema:TableSchema):Promise<DatabaseResult<TableSchema>>;
 
     public function all():Promise<DatabaseResult<RecordSet>>;
