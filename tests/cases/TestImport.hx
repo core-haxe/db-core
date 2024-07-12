@@ -47,7 +47,7 @@ class TestImport implements ITest {
 
         var importer = new JsonDatabaseImporter();
         importer.importFromString(db, jsonString).then(_ -> {
-            return db.schema();
+            return db.schema(true);
         }).then(result -> {
             var schema = result.data;
             assertTableSchema(schema.findTable("Icon"), "Icon", [
