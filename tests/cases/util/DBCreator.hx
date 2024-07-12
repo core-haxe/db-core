@@ -32,7 +32,7 @@ class DBCreator {
             }).then(_ -> {
                 #if !nodejs
                 if ((db is MySqlDatabase)) {
-                    return db.raw("ALTER DATABASE Persons CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;");
+                    return db.raw("ALTER DATABASE Persons CHARACTER SET utf8 COLLATE utf8_unicode_ci;");
                 }
                 #end
                 return null;
