@@ -55,6 +55,7 @@ class TestUpdate implements ITest {
             Assert.equals("HARRIGAN_MODIFIED", result.data.field("lastName"));
             Assert.equals(1, result.data.field("iconId"));
             Assert.equals(999.123, result.data.field("hourlyRate"));
+            Assert.equals(1, result.itemsAffected);
 
             return result.table.findOne(query($personId = 1));
         }).then(result -> {

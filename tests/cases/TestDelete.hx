@@ -60,6 +60,7 @@ class TestDelete implements ITest {
 
             return result.table.delete(recordToDelete);
         }).then(result -> {
+            Assert.equals(1, result.itemsAffected);
             return result.table.findOne(query($personId = 1));
         }).then(result -> {
             Assert.isNull(result.data);
