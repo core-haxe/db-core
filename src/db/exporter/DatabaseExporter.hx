@@ -10,7 +10,7 @@ class DatabaseExporter implements IDatabaseExporter {
     public function exportToString(db:IDatabase, options:DatabaseExportOptions = null):Promise<String> {
         return new Promise((resolve, reject) -> {
             var finalSchema:DatabaseSchema = null;
-            db.schema().then(result -> {
+            db.schema(true).then(result -> {
                 var schema:DatabaseSchema = result.data;
                 finalSchema = schema.clone();
                 // TODO: remove unneeded tables etc
