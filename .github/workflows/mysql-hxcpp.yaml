@@ -23,6 +23,7 @@ jobs:
       test-cpp:  tests/common.hxml --class-path tests
 
       before-tests: |
+        cat /etc/my.cnf
         echo "MYSQL_HOST=localhost" >> $GITHUB_ENV
         echo "MYSQL_USER=root" >> $GITHUB_ENV
         echo "MYSQL_PASS=root" >> $GITHUB_ENV
