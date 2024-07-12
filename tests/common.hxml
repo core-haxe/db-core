@@ -7,3 +7,4 @@
 -lib db-mysql
 
 -D no-deprecation-warnings
+-D allow-raw

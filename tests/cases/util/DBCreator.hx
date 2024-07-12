@@ -1,5 +1,6 @@
 package cases.util;
 
+import db.mysql.MySqlDatabase;
 import db.sqlite.SqliteDatabase;
 import promises.PromiseUtils;
 import haxe.io.Bytes;
@@ -28,6 +29,11 @@ class DBCreator {
                     return null;
                 }
                 return db.create();
+            }).then(_ -> {
+                if ((db is MySqlDatabase)) {
+                    return db.raw("ALTER DATABASE Persons CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;");
+                }
+                return null;
             }).then(_ -> {
                 if (createTables) {
                     return db.createTable("Person", [
