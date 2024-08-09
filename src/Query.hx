@@ -17,6 +17,7 @@ enum QBinop {
     QOpGte;
     QOpLte;
     QOpIn;
+    QOpSimilar;
     QOpUnsupported(v:String);
 }
 
@@ -103,6 +104,8 @@ class Query {
                         QBinop.QOpUnsupported(op.getName());
                 }
                 QueryBinop(qbinop, exprToQueryExpr(e1), exprToQueryExpr(e2));
+            case EUnop(OpNegBits, postFix, e):    
+                QueryBinop(QBinop.QOpSimilar, exprToQueryExpr(e),  exprToQueryExpr(e));
             case EParenthesis(e):
                 QueryParenthesis(exprToQueryExpr(e));
             case EConst(CIdent(s)):
@@ -169,14 +172,35 @@ class Query {
         }
         var sb = new StringBuf();
         queryExprPartToSql(qe, sb, values, fieldPrefix, false);
-        return sb.toString();
+        var s = sb.toString();
+
+        // because of the [mis]use of the haxe OpNegBits in the AST, we have to post fix the SQL string to normalise it
+        // not ideal, but "fine" and i dont think there is another way around it
+        var likeReplacerRegex = ~/=  LIKE (".*?"|\?)/gm;
+        var n = 0;
+        s = likeReplacerRegex.map(s, (f -> {
+            var term = f.matched(1);
+            if (values != null && values[n] != null && (values[n] is String)) {
+                values[n] = Std.string(values[n]).replace("*", "%");
+            }
+            n++;
+            if (term == "?") {
+                return "LIKE ?";
+            }
+            term = term.replace("*", "%");
+            return "LIKE " + term + "";
+        }));
+
+        return s;
     }
 
     private static function queryExprPartToSql(qe:QueryExpr, sb:StringBuf, values:Array<Any>, fieldPrefix:String, isColumn:Bool) {
         switch (qe) {
             case QueryBinop(op, e1, e2):
                 var isColumn2 = (op == QOpEq) || (op == QOpAssign) || (op == QOpNotEq) || (op == QOpGt) || (op == QOpLt) || (op == QOpGte) || (op == QOpLte) || (op == QOpIn);
-                queryExprPartToSql(e1, sb, values, fieldPrefix, isColumn2);
+                if (op != QOpSimilar) {
+                    queryExprPartToSql(e1, sb, values, fieldPrefix, isColumn2);
+                }
                 switch (op) {
                     case QOpEq:                 sb.add(" = ");
                     case QOpAssign:             sb.add(" = ");
@@ -188,6 +212,7 @@ class Query {
                     case QOpGte:                sb.add(" >= ");
                     case QOpLte:                sb.add(" <= ");
                     case QOpIn:                 sb.add(" IN ");
+                    case QOpSimilar:            sb.add(" LIKE ");
                     case QOpUnsupported(v):    
                         trace("WARNING: unsupported binary operation encountered:", v);
                     case _:    
