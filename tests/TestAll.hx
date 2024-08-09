@@ -33,6 +33,7 @@ class TestAll {
     private static function addCases(runner:Runner, db:IDatabase) {
         runner.addCase(new TestBasic(db));
         runner.addCase(new TestQuery(db));
+        runner.addCase(new TestSimilar(db));
         runner.addCase(new TestSchema(db));
         runner.addCase(new TestAdd(db));
         runner.addCase(new TestDelete(db));
