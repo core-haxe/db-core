@@ -55,11 +55,40 @@ class SqlUtils {
         if (query != null) {
             sql += '\nWHERE (${Query.queryExprToSql(query, values, table.name)})';
         }
-        if (limit != null) {
-            sql += ' LIMIT ' + limit;
-        }
-        if (offset != null) {
-            sql += ' OFFSET ' + offset;
+
+        var hasJoins = (relationships != null);
+        if (hasJoins) {
+            var tableDef = databaseSchema.findTable(table.name);
+            if (tableDef != null) {
+                var primaryKeyColumns = tableDef.findPrimaryKeyColumns();
+                if (primaryKeyColumns != null && primaryKeyColumns.length > 0) {
+                    if (limit != null || offset != null) {
+                        if (query == null) {
+                            sql += '\nWHERE ';
+                        } else {
+                            sql += ' AND\n';
+                        }
+                        var tableName = table.name;
+                        var primaryKeyName = primaryKeyColumns[0].name;
+                        sql += '$tableName.$primaryKeyName IN (\n';
+                        sql += '    SELECT $primaryKeyName from $tableName\n';
+                        if (limit != null) {
+                            sql += '    LIMIT $limit\n';
+                        }
+                        if (offset != null) {
+                            sql += '    OFFSET $offset\n';
+                        }
+                        sql += ')';
+                    }
+                }
+            }
+        } else {
+            if (limit != null) {
+                sql += ' LIMIT ' + limit;
+            }
+            if (offset != null) {
+                sql += ' OFFSET ' + offset;
+            }
         }
         sql += ';';
         return sql;
