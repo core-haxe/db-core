@@ -52,26 +52,21 @@ class SqlUtils {
         var sql = 'SELECT ${fieldList} FROM ${table.name}';
         sql += sqlJoin;
 
-        if (query != null) {
-            sql += '\nWHERE (${Query.queryExprToSql(query, values, table.name)})';
-        }
-
         var hasJoins = (relationships != null);
-        if (hasJoins) {
+        if (hasJoins && (limit != null || offset != null)) {
             var tableDef = databaseSchema.findTable(table.name);
             if (tableDef != null) {
                 var primaryKeyColumns = tableDef.findPrimaryKeyColumns();
                 if (primaryKeyColumns != null && primaryKeyColumns.length > 0) {
                     if (limit != null || offset != null) {
-                        if (query == null) {
-                            sql += '\nWHERE ';
-                        } else {
-                            sql += ' AND\n';
-                        }
+                        sql += '\nWHERE ';
                         var tableName = table.name;
                         var primaryKeyName = primaryKeyColumns[0].name;
-                        sql += '$tableName.$primaryKeyName IN (\n';
-                        sql += '    SELECT $primaryKeyName from $tableName\n';
+                        sql += '`$tableName`.`$primaryKeyName` IN (\n';
+                        sql += '    SELECT `$primaryKeyName` FROM `$tableName`\n';
+                        if (query != null) {
+                            sql += '    WHERE (${Query.queryExprToSql(query, values, table.name)})\n';
+                        }
                         if (limit != null) {
                             sql += '    LIMIT $limit\n';
                         }
@@ -83,6 +78,10 @@ class SqlUtils {
                 }
             }
         } else {
+            if (query != null) {
+                sql += '\nWHERE (${Query.queryExprToSql(query, values, table.name)})';
+            }
+    
             if (limit != null) {
                 sql += ' LIMIT ' + limit;
             }
