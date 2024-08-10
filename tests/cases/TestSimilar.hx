@@ -117,4 +117,17 @@ class TestSimilar implements ITest {
             trace("error", error);
         });
     }
+
+    function testBasicSimilar_WildCard_Multiple_Paging(async:Async) {
+        db.table("Person").then(result -> {
+            return result.table.page(0, 2, query($firstName =~ "*i*"));
+        }).then(result -> {
+            Assert.equals(2, result.data.length);
+            Assert.equals("Ian", result.data[0].field("firstName"));
+            Assert.equals("Tim", result.data[1].field("firstName"));
+            async.done();
+        }, error -> {
+            trace("error", error);
+        });
+    }
 }
