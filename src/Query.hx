@@ -190,6 +190,8 @@ class Query {
             term = term.replace("*", "%");
             return "LIKE " + term + "";
         }));
+        s = s.replace("` = NULL", "` IS NULL");
+        s = s.replace("` <> NULL", "` IS NOT NULL");
 
         return s;
     }
@@ -269,10 +271,13 @@ class Query {
                                 var date:Date = cast v;
                                 var dateString = date.toString().replace(" ", "T") + "Z";
                                 values.push(dateString);
+                                sb.add("?");
+                            } else if (v == null) {
+                                sb.add("NULL");
                             } else {
                                 values.push(v);
+                                sb.add("?");
                             }
-                            sb.add("?");
                         }
                     }
                 }

@@ -160,4 +160,56 @@ class TestBasic implements ITest {
             trace("error", error);
         });
     }
+
+    function testBasicFindIsNull(async:Async) {
+        db.table("Person").then(result -> {
+            return result.table.find(query($contractDocument == null));
+        }).then(result -> {
+            Assert.equals(3, result.data.length);
+
+            Assert.equals(2, result.data[0].field("personId"));
+            Assert.equals("Bob", result.data[0].field("firstName"));
+            Assert.equals("Barker", result.data[0].field("lastName"));
+            Assert.equals(3, result.data[0].field("iconId"));
+            Assert.equals(333.444, result.data[0].field("hourlyRate"));
+            Assert.isNull(result.data[0].field("contractDocument"));
+
+            Assert.equals(3, result.data[1].field("personId"));
+            Assert.equals("Tim", result.data[1].field("firstName"));
+            Assert.equals("Mallot", result.data[1].field("lastName"));
+            Assert.equals(2, result.data[1].field("iconId"));
+            Assert.equals(555.666, result.data[1].field("hourlyRate"));
+            Assert.isNull(result.data[1].field("contractDocument"));
+
+            Assert.equals(4, result.data[2].field("personId"));
+            Assert.equals("Jim", result.data[2].field("firstName"));
+            Assert.equals("Parker", result.data[2].field("lastName"));
+            Assert.equals(1, result.data[2].field("iconId"));
+            Assert.equals(777.888, result.data[2].field("hourlyRate"));
+            Assert.isNull(result.data[2].field("contractDocument"));
+
+            async.done();
+        }, error -> {
+            trace("error", error);
+        });
+    }
+    
+    function testBasicFindIsNotNull(async:Async) {
+        db.table("Person").then(result -> {
+            return result.table.find(query($contractDocument != null));
+        }).then(result -> {
+            Assert.equals(1, result.data.length);
+
+            Assert.equals(1, result.data[0].field("personId"));
+            Assert.equals("Ian", result.data[0].field("firstName"));
+            Assert.equals("Harrigan", result.data[0].field("lastName"));
+            Assert.equals(1, result.data[0].field("iconId"));
+            Assert.equals(111.222, result.data[0].field("hourlyRate"));
+            Assert.notNull(result.data[0].field("contractDocument"));
+
+            async.done();
+        }, error -> {
+            trace("error", error);
+        });
+    }
 }
