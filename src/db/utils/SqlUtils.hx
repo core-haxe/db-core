@@ -59,21 +59,22 @@ class SqlUtils {
                 var primaryKeyColumns = tableDef.findPrimaryKeyColumns();
                 if (primaryKeyColumns != null && primaryKeyColumns.length > 0) {
                     if (limit != null || offset != null) {
-                        sql += '\nWHERE ';
                         var tableName = table.name;
                         var primaryKeyName = primaryKeyColumns[0].name;
-                        sql += '`$tableName`.`$primaryKeyName` IN (\n';
+
+                        sql += '\nINNER JOIN(\n';
                         sql += '    SELECT `$primaryKeyName` FROM `$tableName`\n';
                         if (query != null) {
-                            sql += '    WHERE (${Query.queryExprToSql(query, values, table.name)})\n';
+                            sql += '        WHERE (${Query.queryExprToSql(query, values, table.name)})\n';
                         }
                         if (limit != null) {
-                            sql += '    LIMIT $limit\n';
+                            sql += '        LIMIT $limit\n';
                         }
                         if (offset != null) {
-                            sql += '    OFFSET $offset\n';
+                            sql += '        OFFSET $offset\n';
                         }
-                        sql += ')';
+
+                        sql += ') __temp__ on `$tableName`.`$primaryKeyName` = __temp__.`$primaryKeyName`\n';
                     }
                 }
             }
