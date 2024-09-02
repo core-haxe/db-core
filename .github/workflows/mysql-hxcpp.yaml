@@ -47,6 +47,8 @@ jobs:
         haxelib dev db-core db-core
         git clone https://github.com/core-haxe/db-sqlite
         haxelib dev db-sqlite db-sqlite
+        git clone https://github.com/core-haxe/libmysqlclient
+        haxelib dev libmysqlclient libmysqlclient
         git clone https://github.com/core-haxe/mysql
         haxelib dev mysql mysql
         git clone https://github.com/core-haxe/db-mysql
