@@ -3,4 +3,4 @@ common.hxml
 -D local
 
 --neko build/neko/test-all.n
---cmd neko .\build\neko\test-all.n
+--cmd neko ./build/neko/test-all.n

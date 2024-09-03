@@ -99,6 +99,35 @@ class TestAddColumn implements ITest {
             Assert.equals("hourlyRate", personTable.findColumn("hourlyRate").name);
             Assert.equals("new_person_column", personTable.findColumn("new_person_column").name);
 
+            return db.table("Person");
+        }).then(result -> {
+            // testing column with a keyword used by sql like order, group, etc
+            return result.table.addColumn({
+                name: "order",
+                type: ColumnType.Number
+            });
+        }).then(result -> {
+            return db.schema();
+        }).then(result -> {
+            Assert.notNull(result);
+
+            var schema:DatabaseSchema = result.data;
+            Assert.notNull(schema);
+            Assert.notNull(schema.tables);
+            Assert.equals(4, schema.tables.length);
+
+            var personTable = schema.findTable("Person");
+            Assert.notNull(personTable);
+            Assert.equals(8, personTable.columns.length);
+            Assert.equals("personId", personTable.findColumn("personId").name);
+            Assert.equals("lastName", personTable.findColumn("lastName").name);
+            Assert.equals("firstName", personTable.findColumn("firstName").name);
+            Assert.equals("iconId", personTable.findColumn("iconId").name);
+            Assert.equals("contractDocument", personTable.findColumn("contractDocument").name);
+            Assert.equals("hourlyRate", personTable.findColumn("hourlyRate").name);
+            Assert.equals("new_person_column", personTable.findColumn("new_person_column").name);
+            Assert.equals("order", personTable.findColumn("order").name);
+
             async.done();
         }, error -> {
             trace("error", error);
