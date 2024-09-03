@@ -3,4 +3,4 @@ common.hxml
 -D local
 
 --cpp build/hxcpp
---cmd .\build\hxcpp\TestAll
+--cmd ./build/hxcpp/TestAll
