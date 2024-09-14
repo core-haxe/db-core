@@ -8,7 +8,7 @@ using StringTools;
 class SqlUtils {
     public static function buildInsert(table:ITable, record:Record, values:Array<Any> = null, typeMapper:IDataTypeMapper = null):String {
         var fieldNames = fieldNamesFromRecord(record);
-        var sql = 'INSERT INTO ${table.name} (${fieldNames.join(", ")}) VALUES ';
+        var sql = 'INSERT INTO `${table.name}` (${fieldNames.join(", ")}) VALUES ';
         var placeholders = [];
         for (f in record.fieldNames) {
             placeholders.push('?');
@@ -39,7 +39,7 @@ class SqlUtils {
                 var tableSchema = databaseSchema.findTable(table.name);
                 if (tableSchema != null) {
                     for (tableColumn in tableSchema.columns) {
-                        fieldAliases.insert(0, '${table.name}.`${tableColumn.name}` AS `${table.name}.${tableColumn.name}`');
+                        fieldAliases.insert(0, '`${table.name}`.`${tableColumn.name}` AS `${table.name}`.`${tableColumn.name}`');
                     }
                 }
             }
@@ -49,7 +49,7 @@ class SqlUtils {
         if (fieldAliases.length > 0) {
             fieldList = fieldAliases.join(", ");
         }
-        var sql = 'SELECT ${fieldList} FROM ${table.name}';
+        var sql = 'SELECT ${fieldList} FROM `${table.name}`';
         sql += sqlJoin;
 
         var hasJoins = (relationships != null);
@@ -96,7 +96,7 @@ class SqlUtils {
 
     public static function buildCount(table:ITable, query:QueryExpr = null, values:Array<Any> = null):String {
         var fieldList = 'COUNT(*)';
-        var sql = 'SELECT ${fieldList} FROM ${table.name}';
+        var sql = 'SELECT ${fieldList} FROM `${table.name}`';
 
         if (query != null) {
             sql += '\nWHERE (${Query.queryExprToSql(query, values, table.name)})';
@@ -116,7 +116,7 @@ class SqlUtils {
         if (fieldAliases.length > 0) {
             fieldList = fieldAliases.join(", ");
         }
-        var sql = 'SELECT ${fieldList} FROM ${table.name}';
+        var sql = 'SELECT ${fieldList} FROM `${table.name}`';
 
         if (query != null) {
             sql += '\nWHERE (${Query.queryExprToSql(query, values, table.name)})';
@@ -162,7 +162,7 @@ class SqlUtils {
             }
 
             for (tableColumn in tableSchema.columns) {
-                fieldAliases.push('`${joinName}`.`${tableColumn.name}` AS `${joinName}.${tableColumn.name}`');
+                fieldAliases.push('`${joinName}`.`${tableColumn.name}` AS `${joinName}`.`${tableColumn.name}`');
             }
 
             sql += '\n    LEFT JOIN `${table2}` AS `${joinName}` ON `${joinName}`.`${field2}` = `${prefix}`.`${field1}`';
@@ -174,7 +174,7 @@ class SqlUtils {
 
     public static function buildDeleteRecord(table:ITable, record:Record, values:Array<Any> = null):String {
         var fieldNames = fieldNamesFromRecord(record);
-        var sql = 'DELETE FROM ${table.name} WHERE ';
+        var sql = 'DELETE FROM `${table.name}` WHERE ';
         var placeholders = [];
         for (f in record.fieldNames) {
             var v = record.field(f);
@@ -193,7 +193,7 @@ class SqlUtils {
     }
 
     public static function buildDeleteWhere(table:ITable, query:QueryExpr):String {
-        var sql = 'DELETE FROM ${table.name}';
+        var sql = 'DELETE FROM `${table.name}`';
         if (query != null) {
             sql += ' WHERE (${Query.queryExprToSql(query, null, table.name)})';
         }
@@ -203,7 +203,7 @@ class SqlUtils {
 
     public static function buildUpdate(table:ITable, query:QueryExpr, record:Record, values:Array<Any> = null, typeMapper:IDataTypeMapper = null):String {
         var fieldNames = fieldNamesFromRecord(record);
-        var sql = 'UPDATE ${table.name} SET ';
+        var sql = 'UPDATE `${table.name}` SET ';
         var placeholders = [];
         for (f in record.fieldNames) {
             var v = record.field(f);
