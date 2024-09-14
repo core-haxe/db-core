@@ -39,7 +39,7 @@ class SqlUtils {
                 var tableSchema = databaseSchema.findTable(table.name);
                 if (tableSchema != null) {
                     for (tableColumn in tableSchema.columns) {
-                        fieldAliases.insert(0, '`${table.name}`.`${tableColumn.name}` AS `${table.name}`.`${tableColumn.name}`');
+                        fieldAliases.insert(0, '`${table.name}`.`${tableColumn.name}` AS `${table.name}.${tableColumn.name}`');
                     }
                 }
             }
