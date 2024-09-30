@@ -38,6 +38,11 @@ private class RecordSetImpl {
         return new RecordSetIterator(records);
     }
 
+    @:noCompletion
+    public function keyValueIterator():RecordSetKeyValueIterator {
+      return new RecordSetKeyValueIterator(records);
+    }
+
     public var length(get, null):Int;
     private function get_length():Int {
         if (records == null) {
@@ -155,6 +160,32 @@ private class RecordSetIterator {
 
     public function next():Record {
         var r = records[pos];
+        pos++;
+        return r;
+    }
+}
+
+private class RecordSetKeyValueIterator {
+    private var records:Array<Record> = null;
+    private var pos:Int = 0;
+
+    public function new(records:Array<Record> = null) {
+        this.records = records;
+        this.pos = 0;
+    }
+
+    public function hasNext():Bool {
+        if (records == null) {
+            return false;
+        }
+        return pos < records.length;
+    }
+
+    public function next():{key: Int, value:Record} {
+        var r = {
+          key: pos,
+          value: records[pos]
+        }
         pos++;
         return r;
     }
