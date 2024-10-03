@@ -1,5 +1,19 @@
 package db;
 
+#if (!macro && (dbcore_as_externs || (modular && !modular_host)))
+
+@:structInit
+extern class TableSchema {
+    @:optional public var name:String;
+    @:optional public var columns:Array<ColumnDefinition>;
+    @:optional public var data:RecordSet;
+    public function clone():TableSchema;
+    public function debugString():String;
+}
+
+#else
+
+@:keep @:expose
 @:structInit
 class TableSchema {
     @:optional public var name:String;
@@ -95,3 +109,5 @@ class TableSchema {
         return sb.toString();
     }
 }
+
+#end

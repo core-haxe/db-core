@@ -1,5 +1,19 @@
 package db;
 
+#if (!macro && (dbcore_as_externs || (modular && !modular_host)))
+
+extern class Record {
+    public function new();
+    private var data:Map<String, Any>;
+    public function field(name:String, value:Any = null):Any;
+    public function renameField(fieldName:String, newFieldName:String):Void;
+    public function copyField(fieldName:String, newFieldName:String):Void;
+    public function removeField(name:String):Void;
+}
+
+#else
+
+@:keep @:expose
 class Record {
     private var data:Map<String, Any> = [];
 
@@ -178,3 +192,5 @@ class Record {
         return r;
     }
 }
+
+#end

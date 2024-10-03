@@ -9,7 +9,7 @@ class DatabaseTypes {
     private static var typeClasses:Map<String, String> = [];
 
     macro static function register(id:String, c:String) {
-        Sys.println('registering database type ${c} (${id})');
+        Sys.println('db-core     > registering database type ${c} (${id})');
         var parts = c.split(".");
         var name = parts.pop();
         #if (haxe >= version("4.3.0"))
@@ -28,7 +28,6 @@ class DatabaseTypes {
 
     macro static function build():Array<Field> {
         var fields = Context.getBuildFields();
-
 
         var typeIds:Array<String> = [];
         var typeExprs:Array<Expr> = [];
