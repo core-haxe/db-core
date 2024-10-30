@@ -33,6 +33,11 @@ private class RecordSetImpl {
         this.records = records;
     }
 
+    public inline function reverse() {
+      records.reverse();
+      return records;
+    }
+    
     @:noCompletion
     public function iterator():RecordSetIterator {
         return new RecordSetIterator(records);
