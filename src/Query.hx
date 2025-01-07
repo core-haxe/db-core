@@ -236,7 +236,7 @@ class Query {
                 }
             case QueryConstant(QString(s)):
                 if (values == null) {
-                    sb.add("\"" + s + "\"");
+                    sb.add("'" + s + "'");
                 } else {
                     values.push(s);
                     sb.add("?");
@@ -248,7 +248,7 @@ class Query {
                     var newArray:Array<String> = [];
                     for (a in array) {
                         if (a is String) {
-                            newArray.push('"${Std.string(a)}"');
+                            newArray.push('\'${Std.string(a)}\'');
                         } else {
                             newArray.push(Std.string(a));
                         }
