@@ -177,10 +177,10 @@ class Query {
 
         // because of the [mis]use of the haxe OpNegBits in the AST, we have to post fix the SQL string to normalise it
         // not ideal, but "fine" and i dont think there is another way around it
-        var likeReplacerRegex = ~/=  LIKE (".*?"|\?)/gm;
+        var likeReplacerRegex = ~/=.*LIKE (.*)/gm;
         var n = 0;
         s = likeReplacerRegex.map(s, (f -> {
-            var term = f.matched(1);
+            var term = f.matched(1).trim();
             if (values != null && values[n] != null && (values[n] is String)) {
                 values[n] = Std.string(values[n]).replace("*", "%");
             }
@@ -189,6 +189,12 @@ class Query {
                 return "LIKE ?";
             }
             term = term.replace("*", "%");
+            if (!term.startsWith("'")) {
+                term = "'" + term;
+            }
+            if (!term.endsWith("'")) {
+                term = term + "'";
+            }
             return "LIKE " + term + "";
         }));
         s = s.replace("` = NULL", "` IS NULL");
