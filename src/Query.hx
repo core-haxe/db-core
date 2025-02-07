@@ -49,7 +49,7 @@ class Query {
     }
 
     public static macro function field(name:String) {
-        return macro "%" + $v{name};
+        return macro "^" + $v{name};
     }
 
     public static function joinQueryParts(parts:Array<QueryExpr>, op:QBinop) {
@@ -177,7 +177,7 @@ class Query {
 
         // because of the [mis]use of the haxe OpNegBits in the AST, we have to post fix the SQL string to normalise it
         // not ideal, but "fine" and i dont think there is another way around it
-        var likeReplacerRegex = ~/=.*LIKE (.*)/gm;
+        var likeReplacerRegex = ~/=\s\sLIKE\s('.*?'|\?)/gm;
         var n = 0;
         s = likeReplacerRegex.map(s, (f -> {
             var term = f.matched(1).trim();
@@ -206,8 +206,8 @@ class Query {
     private static function queryExprPartToSql(qe:QueryExpr, sb:StringBuf, values:Array<Any>, fieldPrefix:String, isColumn:Bool) {
         switch (qe) {
             case QueryBinop(op, e1, e2):
-                var isColumn2 = (op == QOpEq) || (op == QOpAssign) || (op == QOpNotEq) || (op == QOpGt) || (op == QOpLt) || (op == QOpGte) || (op == QOpLte) || (op == QOpIn);
-                if (op != QOpSimilar) {
+                var isColumn2 = (op.getName() == "QOpEq") || (op.getName() == "QOpAssign") || (op.getName() == "QOpNotEq") || (op.getName() == "QOpGt") || (op.getName() == "QOpLt") || (op.getName() == "QOpGte") || (op.getName() == "QOpLte") || (op.getName() == "QOpIn");
+                if (op.getName() != "QOpSimilar") {
                     queryExprPartToSql(e1, sb, values, fieldPrefix, isColumn2);
                 }
                 switch (op) {
@@ -262,13 +262,17 @@ class Query {
                     sb.add(newArray.join(", "));
                     sb.add(")");
                 } else if (values == null) {
-                    if (Std.string(v).startsWith("%")) { // lets add a special case for %field, this is so we can construct query in macros (where $ means something different)
+                    if (Std.string(v).startsWith("^")) { // lets add a special case for %field, this is so we can construct query in macros (where $ means something different)
                         sb.add(buildColumn(Std.string(v).substring(1), fieldPrefix));
                     } else {
-                        sb.add(v);
+                        if (v is String) {
+                            sb.add("'" + v + "'");
+                        } else {
+                            sb.add(v);
+                        }
                     }
                 } else {
-                    if (Std.string(v).startsWith("%")) { // lets add a special case for %field, this is so we can construct query in macros (where $ means something different)
+                    if (Std.string(v).startsWith("^")) { // lets add a special case for %field, this is so we can construct query in macros (where $ means something different)
                         sb.add(buildColumn(Std.string(v).substring(1), fieldPrefix));
                     } else {
                         if (isColumn) {
