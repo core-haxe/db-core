@@ -49,9 +49,9 @@ class Query {
         return generate(qe);
     }
 
-    public static macro function raw(query:String) {
+    public static macro function raw(expr:Expr) {
         var pos = Context.currentPos();
-        return macro @:pos(pos) Query.QueryExpr.QueryRaw($v{query});
+        return macro @:pos(pos) Query.QueryExpr.QueryRaw($expr);
     }
 
     public static macro function field(name:String) {

@@ -49,6 +49,24 @@ class TestRaw implements ITest {
         });
     }
 
+
+    function testBasicRawQuery_VarQuery(async:Async) {
+        db.table("Person").then(result -> {
+            var query = "SELECT * FROM Person WHERE personId = 1";
+            return result.table.find(raw(query));
+        }).then(result -> {
+            Assert.equals(1, result.data.length);
+            Assert.equals(1, result.data[0].field("personId"));
+            Assert.equals("Ian", result.data[0].field("firstName"));
+            Assert.equals("Harrigan", result.data[0].field("lastName"));
+            Assert.equals(1, result.data[0].field("iconId"));
+            Assert.equals(111.222, result.data[0].field("hourlyRate"));
+            async.done();
+        }, error -> {
+            trace("error", error);
+        });
+    }
+
     function testBasicRawQuery_SubstTableName(async:Async) {
         db.table("Person").then(result -> {
             return result.table.find(raw("SELECT * FROM $table WHERE personId = 1"));
