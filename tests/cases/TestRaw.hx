@@ -49,7 +49,6 @@ class TestRaw implements ITest {
         });
     }
 
-
     function testBasicRawQuery_VarQuery(async:Async) {
         db.table("Person").then(result -> {
             var query = "SELECT * FROM Person WHERE personId = 1";
