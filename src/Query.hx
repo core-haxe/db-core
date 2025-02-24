@@ -40,12 +40,18 @@ enum QueryExpr {
     QueryCall(name:String, params:Array<QueryExpr>);
     QueryArrayDecl(values:Array<QueryExpr>);
     QueryUnsupported(v:String);
+    QueryRaw(v:String);
 }
 
 class Query {
     public static macro function query(expr:Expr) {
         var qe = exprToQueryExpr(expr);
         return generate(qe);
+    }
+
+    public static macro function raw(query:String) {
+        var pos = Context.currentPos();
+        return macro @:pos(pos) Query.QueryExpr.QueryRaw($v{query});
     }
 
     public static macro function field(name:String) {
@@ -83,6 +89,7 @@ class Query {
             case QueryCall(name, params): macro @:pos(pos) Query.QueryExpr.QueryCall($v{name}, $v{params});
             case QueryArrayDecl(values): macro @:pos(pos) Query.QueryExpr.QueryArrayDecl($v{values});
             case QueryUnsupported(v): macro @:pos(pos) Query.QueryExpr.QueryUnsupported($v{v});
+            case QueryRaw(v): macro @:pos(pos) Query.QueryExpr.QueryRaw($v{v});
         }
     }
 

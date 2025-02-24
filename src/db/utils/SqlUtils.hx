@@ -31,6 +31,13 @@ class SqlUtils {
     }
 
     public static function buildSelect(table:ITable, query:QueryExpr = null, limit:Null<Int> = null, offset:Null<Int> = null, values:Array<Any> = null, relationships:RelationshipDefinitions = null, databaseSchema:DatabaseSchema = null):String {
+        if (query != null) {
+            switch (query) {
+                case QueryRaw(v):
+                    return v.replace("${table}", table.name).replace("$table", table.name);
+                case _:    
+            }
+        }
         var alwaysAliasResultFields:Bool = table.db.getProperty("alwaysAliasResultFields", false);
         var fieldAliases = [];
         var sqlJoin = buildJoins(table.name, null, relationships, databaseSchema, fieldAliases);
