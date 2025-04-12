@@ -13,7 +13,7 @@ class TestAll {
 
         var databaseBackend = Sys.getEnv("DB_CORE_BACKEND");
         if (databaseBackend == null) {
-            databaseBackend = "sqlite";
+            databaseBackend = "mysql";
         }
 
         trace("DB_CORE_BACKEND: " + databaseBackend);
@@ -46,7 +46,7 @@ class TestAll {
         runner.addCase(new TestAddColumn(db));
         runner.addCase(new TestRemoveColumn(db));
 
-        #if !neko
+        #if (!neko && !php)
         runner.addCase(new TestBinary(db));
         runner.addCase(new TestExport(db));
         runner.addCase(new TestImport(db));

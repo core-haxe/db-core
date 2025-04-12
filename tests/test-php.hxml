@@ -1,0 +1,6 @@
+common.hxml
+
+-D local
+
+--php build/php
+#--cmd hl ./build/hl/test-all.hl

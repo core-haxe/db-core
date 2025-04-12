@@ -41,7 +41,11 @@ class TestCount implements ITest {
 
             return result.table.count();
         }).then(result -> {
+            #if php
+            Assert.equals(4, Std.parseInt(Std.string(result.data)));
+            #else
             Assert.equals(4, result.data);
+            #end
             async.done();
         }, error -> {
             trace("error", error);
@@ -56,7 +60,11 @@ class TestCount implements ITest {
 
             return result.table.count(query($personId = 1 || $personId = 2));
         }).then(result -> {
+            #if php
+            Assert.equals(2, Std.parseInt(Std.string(result.data)));
+            #else
             Assert.equals(2, result.data);
+            #end
             async.done();
         }, error -> {
             trace("error", error);
