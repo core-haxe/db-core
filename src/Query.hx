@@ -167,6 +167,8 @@ class Query {
                     exprs.push(exprToQueryExpr(v));
                 }
                 QueryArrayDecl(exprs);
+            case EMeta(_, _): // do nothing
+                return QueryUnsupported(e.expr.getName());
             case _:
                 trace("unsupported:", e.expr);
                 return QueryUnsupported(e.expr.getName());
