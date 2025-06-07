@@ -45,6 +45,7 @@ class TestAll {
         runner.addCase(new TestFindUnique(db));
         runner.addCase(new TestAddColumn(db));
         runner.addCase(new TestRemoveColumn(db));
+        runner.addCase(new TestCreateIndex(db));
 
         #if (!neko && !php)
         runner.addCase(new TestBinary(db));
@@ -67,7 +68,7 @@ class TestAll {
             host: Sys.getEnv("MYSQL_HOST"),
             user: Sys.getEnv("MYSQL_USER"),
             pass: Sys.getEnv("MYSQL_PASS"),
-            port: 3306
+            port: 3308
         });
     }
 }

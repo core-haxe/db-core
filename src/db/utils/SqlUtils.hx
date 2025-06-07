@@ -101,6 +101,33 @@ class SqlUtils {
         return sql;
     }
 
+    public static function buildCreateIndex(table:ITable, fields:Array<String>, unique:Bool, name:String):String {
+        var tableName = table.name;
+        if (name == null) {
+            name = "idx_" + fields.join("_");
+        }
+        var escapedFields = [];
+        for (field in fields) {
+            escapedFields.push('`${field}`');
+        }
+
+        var sb = new StringBuf();
+        sb.add('CREATE');
+        if (unique) {
+            sb.add(' UNIQUE');
+        }
+        sb.add(' INDEX IF NOT EXISTS ');
+        sb.add(name);
+        sb.add(' ON ');
+        sb.add(tableName);
+        sb.add('(');
+        sb.add(escapedFields.join(","));
+        sb.add(')');
+        sb.add(';');
+
+        return sb.toString();
+    }
+
     public static function buildCount(table:ITable, query:QueryExpr = null, values:Array<Any> = null):String {
         var fieldList = 'COUNT(*)';
         var sql = 'SELECT ${fieldList} FROM `${table.name}`';

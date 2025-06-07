@@ -11,6 +11,8 @@ interface ITable {
     public function schema(force:Bool = false):Promise<DatabaseResult<TableSchema>>;
     public function applySchema(newSchema:TableSchema):Promise<DatabaseResult<TableSchema>>;
 
+    public function createIndex(fields:Array<String>, unique:Bool = false, name:String = null):Promise<DatabaseResult<ITable>>;
+
     public function all():Promise<DatabaseResult<RecordSet>>;
     public function page(pageIndex:Int, pageSize:Int = 100, query:QueryExpr = null, allowRelationships:Bool = true):Promise<DatabaseResult<RecordSet>>;
     public function add(record:Record):Promise<DatabaseResult<Record>>;
