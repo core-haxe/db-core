@@ -80,16 +80,16 @@ class Query {
     private static function generate(qe:QueryExpr):haxe.macro.Expr {
         var pos = Context.currentPos();
         return switch (qe) {
-            case QueryValue(e): macro @:pos(pos) Query.QueryExpr.QueryValue($e);
-            case QueryBinop(op, e1, e2): macro @:pos(pos) Query.QueryExpr.QueryBinop($i{haxe.EnumTools.EnumValueTools.getName(op)}, $e{generate(e1)}, $e{generate(e2)});
-            case QueryParenthesis(e): macro @:pos(pos) Query.QueryExpr.QueryParenthesis($e{generate(e)});
-            case QueryConstant(c): macro @:pos(pos) Query.QueryExpr.QueryConstant($i{haxe.EnumTools.EnumValueTools.getName(c)}($a{
+            case QueryValue(e): macro @:pos(pos) @:privateAccess Query.QueryExpr.QueryValue($e);
+            case QueryBinop(op, e1, e2): macro @:pos(pos) @:privateAccess Query.QueryExpr.QueryBinop($i{haxe.EnumTools.EnumValueTools.getName(op)}, $e{generate(e1)}, $e{generate(e2)});
+            case QueryParenthesis(e): macro @:pos(pos) @:privateAccess Query.QueryExpr.QueryParenthesis($e{generate(e)});
+            case QueryConstant(c): macro @:pos(pos) @:privateAccess Query.QueryExpr.QueryConstant($i{haxe.EnumTools.EnumValueTools.getName(c)}($a{
                 haxe.EnumTools.EnumValueTools.getParameters(c).map(p -> macro @:pos(pos) $v{p})
             }));
-            case QueryCall(name, params): macro @:pos(pos) Query.QueryExpr.QueryCall($v{name}, $v{params});
-            case QueryArrayDecl(values): macro @:pos(pos) Query.QueryExpr.QueryArrayDecl($v{values});
-            case QueryUnsupported(v): macro @:pos(pos) Query.QueryExpr.QueryUnsupported($v{v});
-            case QueryRaw(v): macro @:pos(pos) Query.QueryExpr.QueryRaw($v{v});
+            case QueryCall(name, params): macro @:pos(pos) @:privateAccess Query.QueryExpr.QueryCall($v{name}, $v{params});
+            case QueryArrayDecl(values): macro @:pos(pos) @:privateAccess Query.QueryExpr.QueryArrayDecl($v{values});
+            case QueryUnsupported(v): macro @:pos(pos) @:privateAccess Query.QueryExpr.QueryUnsupported($v{v});
+            case QueryRaw(v): macro @:pos(pos) @:privateAccess Query.QueryExpr.QueryRaw($v{v});
         }
     }
 
@@ -167,8 +167,6 @@ class Query {
                     exprs.push(exprToQueryExpr(v));
                 }
                 QueryArrayDecl(exprs);
-            case EMeta(_, _): // do nothing
-                return QueryUnsupported(e.expr.getName());
             case _:
                 trace("unsupported:", e.expr);
                 return QueryUnsupported(e.expr.getName());
@@ -243,6 +241,13 @@ class Query {
             case QueryConstant(QIdent(s)): 
                 sb.add(buildColumn(s, fieldPrefix));
             case QueryConstant(QInt(s)):    
+                if (values == null) {
+                    sb.add(s);
+                } else {
+                    values.push(s);
+                    sb.add("?");
+                }
+            case QueryConstant(QFloat(s)):    
                 if (values == null) {
                     sb.add(s);
                 } else {
@@ -324,7 +329,7 @@ class Query {
                 sb.add(")");
             case QueryUnsupported(v):
                 trace("WARNING: unsupported query expression encountered:", v);
-            case _:    
+            case QueryRaw(_):
         }
     }
 
