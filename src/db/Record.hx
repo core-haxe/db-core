@@ -9,6 +9,7 @@ extern class Record {
     public function renameField(fieldName:String, newFieldName:String):Void;
     public function copyField(fieldName:String, newFieldName:String):Void;
     public function removeField(name:String):Void;
+    public function empty(name:String):Void;
 }
 
 #else
