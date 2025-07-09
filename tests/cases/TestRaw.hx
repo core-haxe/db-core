@@ -85,9 +85,9 @@ class TestRaw implements ITest {
     function testBasicRawQuery_Join(async:Async) {
         db.table("Person").then(result -> {
             return result.table.find(raw("
-                SELECT * FROM Person
+                SELECT Person.*, Icon.path FROM Person
                 INNER JOIN Icon ON Person.iconId = Icon.IconId  
-                WHERE personId = 1 or personId = 3;            
+                WHERE Person.personId = 1 OR Person.personId = 3;            
             "));
         }).then(result -> {
             Assert.equals(2, result.data.length);
