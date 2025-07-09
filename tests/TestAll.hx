@@ -68,7 +68,7 @@ class TestAll {
             host: Sys.getEnv("MYSQL_HOST"),
             user: Sys.getEnv("MYSQL_USER"),
             pass: Sys.getEnv("MYSQL_PASS"),
-            port: 3308
+            port: 3306
         });
     }
 }
