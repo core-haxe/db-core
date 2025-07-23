@@ -1,1 +1,2 @@
 --macro db.macros.Library.printInfo()
+-D dbcore
