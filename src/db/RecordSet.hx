@@ -84,6 +84,21 @@ private class RecordSetImpl {
         return null;
     }
 
+    public function findRecords(fieldName:String, fieldValue:Any):Array<Record> {
+        if (records == null) {
+            return null;
+        }
+
+        var subRecords = [];
+        for (r in records) {
+            if (r.field(fieldName) == fieldValue) {
+                subRecords.push(r);
+            }
+        }
+
+        return subRecords;
+    }
+
     public function extractFieldValues<T>(fieldName:String):Array<T> {
         if (records == null) {
             return [];
