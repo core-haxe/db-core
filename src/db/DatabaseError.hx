@@ -8,4 +8,8 @@ class DatabaseError {
         this.message = message;
         this.call = call;
     }
+
+    public function toString():String {
+        return call + ": " + message;
+    }
 }
